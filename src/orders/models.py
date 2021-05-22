@@ -5,16 +5,18 @@ from decimal import Decimal
 
 class Order(models.Model):
 
+    NEW = "NE"
     WAITING_ANSWER = "ER"
     ACCEPTED = "AC"
     MAKING = "MK"
     FINISHED = "FI"
-    STATES = (
+    STATES = [
+        (NEW, 'Nuevo'),
         (WAITING_ANSWER, 'Esperando respuesta'),
         (ACCEPTED, 'Aceptado'),
         (MAKING, 'En confección'),
         (FINISHED, 'Terminado'),
-    )
+    ]
 
     customer = models.ForeignKey(
         Customer, on_delete=models.SET_DEFAULT, default=None)
@@ -26,7 +28,7 @@ class Order(models.Model):
     expiration_date = models.DateField(
         verbose_name="expiration date", default=None)
     state = models.CharField(
-        max_length=1, choices=STATES, default=WAITING_ANSWER)
+        max_length=1, choices=STATES, default=NEW)
 
     def __str__(self):
         return f'{self.id}-{self.creation_date}'

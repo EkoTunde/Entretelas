@@ -20,5 +20,6 @@ from homepage.views import home_screen_view
 urlpatterns = [
     path('', home_screen_view, name="home"),
     path('costs/', include('costs.urls')),
+    path('orders/', include('orders.urls')),
     path('admin/', admin.site.urls),
 ]
