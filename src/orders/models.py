@@ -1,5 +1,5 @@
 from django.db import models
-from customers.models import Customer
+from django.urls import reverse
 from decimal import Decimal
 
 
@@ -18,17 +18,30 @@ class Order(models.Model):
         (FINISHED, 'Terminado'),
     ]
 
-    customer = models.ForeignKey(
-        Customer, on_delete=models.SET_DEFAULT, default=None)
+    customer_first_name = models.CharField(
+        max_length=100, verbose_name="Nombre")
+    customer_last_name = models.CharField(
+        max_length=100, verbose_name="Apellido",
+        default=None, blank=True, null=True)
+    customer_email = models.EmailField(
+        max_length=254, verbose_name="Email",
+        default=None, blank=True, null=True)
+    customer_tel = models.CharField(
+        max_length=50, verbose_name="Teléfono",
+        default=None, blank=True, null=True)
     creation_date = models.DateTimeField(
         verbose_name="creation date", auto_now_add=True)
     last_edited = models.DateTimeField(
-        verbose_name="last edition", auto_now=True)
-    fabrics = models.ManyToManyField("Fabric")
+        verbose_name="Última edición", auto_now=True)
     expiration_date = models.DateField(
-        verbose_name="expiration date", default=None)
+        verbose_name="Fecha de expiración",
+        default=None, blank=True, null=True)
     state = models.CharField(
-        max_length=1, choices=STATES, default=NEW)
+        max_length=1, choices=STATES, default=NEW,
+        verbose_name="Estado")
+
+    def get_absolute_url(self):
+        return reverse("orders:order-detail", kwargs={"id": self.id})
 
     def __str__(self):
         return f'{self.id}-{self.creation_date}'
@@ -147,6 +160,9 @@ class Fabric(models.Model):
     name = models.CharField(max_length=250)
     price_per_size = models.DecimalField(max_digits=50, decimal_places=2)
     size = models.DecimalField(max_digits=50, decimal_places=2)
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE,
+        related_name='fabrics', default=None)
 
     def total(self):
         pps = Decimal(self.price_per_size)

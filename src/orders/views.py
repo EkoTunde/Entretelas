@@ -14,15 +14,11 @@ from .forms import OrderModelForm
 class OrderCreateView(CreateView):
     template_name = 'orders/order_create.html'
     form_class = OrderModelForm
-    queryset = Order.objects.all()  # <blog>/<modelname>_list.html
-    # success_url = '/'
+    queryset = Order.objects.all()
 
     def form_valid(self, form):
         print(form.cleaned_data)
         return super().form_valid(form)
-
-    def get_success_url(self):
-        return '/'
 
 
 class OrdersListView(ListView):
