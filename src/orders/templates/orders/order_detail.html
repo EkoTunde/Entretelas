@@ -2,12 +2,72 @@
 
 {% block content %}
 
-<h1>{{ object.id }}</h1>
-<p>{{ object.customer }}</p>
-<p>{{ object.creation_date }}</p>
-<p>{{ object.fabrics }}</p>
-<p>{{ object.expiraton_date }}</p>
-<p>{{ object.state }}</p>
-<p>{{ object.items }}</p>
+<style type="text/css">
+    .d {
+        border: 3px solid;
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+
+    .state {
+        margin: 5px;
+        padding: 5px;
+    }
+</style>
+
+
+<div class="d">
+    <h1>Pedido N.° {{ order.id }}</h1>
+</div>
+{% load tz %}<p>Creado el {{ order.creation_date|timezone:"America/Buenos_Aires" }}</p>
+<h5>Estado ->
+    {% if order.state == "NE" %}
+    <span class="state" style="background-color: #E33142; color: #fff;">
+        {% elif order.state == "ER" %}
+        <span class="state" style="background-color: #FBBF09;">
+            {% elif order.state == "AC" %}
+            <span class="state" style="background-color: #198754; color: #fff;">
+                {% elif order.state == "MK" %}
+                <span class="state" style="background-color: #106DF9; color: #fff;">
+                    {% elif order.state == "FI" %}
+                    <span class="state" style="background-color: #6C757D; color: #fff;">
+                        {% endif %}
+                        {{ order.get_state_display }}
+                    </span>
+</h5>
+
+<hr>
+<h5>Datos del/de la cliente <span><button class="btn btn-primary">Editar</button></span></h5>
+<p><b>Nombre y apellido:</b> {{ order.customer_first_name }} {{ order.customer_last_name }}</p>
+<p><b>Email:</b> <a href="mailto:{{ order.customer_email }}">{{ order.customer_email }}</a></p>
+<p><b>Teléfono:</b> {{ order.customer_tel }}</p>
+<hr>
+
+<h5>Productos</h5>
+{% if order.items|length > 1 %}
+<div>
+    <table class="table table-hover w-auto">
+        <thead class=" table-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Nombre y Apellido</th>
+                <th scope="col">Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in orders.items %}
+            {% include 'orders/snippets/item_table_item.html' with item=item %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p>Aun no agregaste ningún producto a la lista. Agregá uno haciendo click <a href="#">aquí</a>.</p>
+{% endif %}
+
+<p>{{ order.expiraton_date }}</p>
+<p>{{ order.state }}</p>
+<p>{{ order.items }}</p>
 
 {% endblock %}

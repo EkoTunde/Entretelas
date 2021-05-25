@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import (
     CreateView,
@@ -33,6 +33,14 @@ class OrderDetailView(DetailView):
     def get_object(self):
         id_ = self.kwargs.get("id")
         return get_object_or_404(Order, id=id_)
+
+
+def get_order_detail_view(request, id, *args, **kwargs):
+    order = get_object_or_404(Order, id=id)
+    context = {
+        "order": order
+    }
+    return render(request, 'orders/order_detail.html', context)
 
 
 class OrderUpdateView(UpdateView):

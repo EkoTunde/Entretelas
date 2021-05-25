@@ -1,0 +1,30 @@
+<style>
+    .td {
+        word-wrap: break-word;
+    }
+</style>
+{% load tz %}
+<tr>
+    <th scope="row">{{ instance.id }}</th>
+
+    {% if instance.state == "NE" %}
+    <td class="td" style="background-color: #E33142; color: #fff;">
+        {% elif instance.state == "ER" %}
+    <td class="td" style="background-color: #FBBF09; ">
+        {% elif instance.state == "AC" %}
+    <td class="td" style="background-color: #198754; color: #fff;">
+        {% elif instance.state == "MK" %}
+    <td class="td" style="background-color: #106DF9; color: #fff;">
+        {% elif instance.state == "FI" %}
+    <td class="td" style="background-color: #6C757D; color: #fff;">
+        {% endif %}
+        {{ instance.get_state_display }}
+    </td>
+    <td class="td">{{ instance.customer_first_name }}
+        {{ instance.customer_last_name }}
+    </td>
+    <td>
+        <a href='{{ instance.get_absolute_url }}'>{{ instance.creation_date|timezone:"America/Buenos_Aires" }}
+        </a>
+    </td>
+</tr>
