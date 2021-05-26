@@ -172,22 +172,22 @@ class Item(models.Model):
             total += self.get_component_total(component)
         return total
 
-    def get_component_total(self, component):
-        material = component['raw_material']
+    def get_component_total(self, comp):
+        material = comp['raw_material']
         if material is None:
             return Decimal(0)
 
-        mult_by = component['multiply_by']
+        mult_by = comp['multiply_by']
         if mult_by is self.NONE:
             return Decimal(material.price)
 
-        factor = component['factor']
+        factor = comp['factor']
         measure = self.get_measures()[mult_by]
 
         if factor == 1:
             return material.price * measure
 
-        tolerance = component['tolerance']
+        tolerance = comp['tolerance']
         times_it_fits = int(measure/factor)
 
         intolerant = measure - (times_it_fits * factor) > tolerance
