@@ -43,6 +43,11 @@ def get_order_detail_view(request, id, *args, **kwargs):
     return render(request, 'orders/order_detail.html', context)
 
 
+# def get_total(items, fabrics):
+#     items = [Decimal()]
+#     return 0
+
+
 class OrderUpdateView(UpdateView):
     template_name = 'orders/order_create.html'
     form_class = OrderModelForm
