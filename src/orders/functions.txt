@@ -33,3 +33,47 @@ def get_price(self):
       var tolerance = $('#tolerance_' + nro).val().trim() == "" ? 0 : Number($('#tolerance_' + nro).val().trim());
       var times_it_fits = parseInt(measure/factor);
       return material * (measure - (times_it_fits * factor) > tolerance ? times_it_fits+1 : times_it_fits);
+
+
+def get_component_total(self, comp):
+        material = comp['raw_material']
+        print('\nmaterial', material)
+        if material is None:
+            print('returning material none so 0')
+            return Decimal(0)
+        print('price is', material.price)
+
+        mult_by = comp['multiply_by']
+        print('mult_by', mult_by)
+        if mult_by is self.NONE:
+            print("returning material's price cause multby is NONE")
+            return Decimal(material.price)
+
+        factor = comp['factor']
+        print('factor', factor)
+        measure = self.get_measures()[mult_by]
+        print('measure is', measure)
+
+# from orders.models import Order
+# orders = Order.objects.all()
+# order = orders[0]
+# items = order.items.all()
+# item = items[0]
+# item.calculate_total()
+
+        if factor == 1:
+            print('factor is 1, returnig price * measure ->',
+                  Decimal(material.price)*Decimal(measure))
+            return Decimal(material.price) * Decimal(measure)
+
+        tolerance = comp['tolerance']
+        times_it_fits = int(measure/factor)
+        print('tolerance', tolerance)
+        print('times_it_fits', times_it_fits)
+
+        intolerant = measure - (times_it_fits * factor) > tolerance
+        if intolerant:
+            print('intolerance so fits+1')
+            times_it_fits += 1
+        print('all right, returning', Decimal(material.price * times_it_fits))
+        return Decimal(material.price * times_it_fits)

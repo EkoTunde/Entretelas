@@ -1,0 +1,8 @@
+{% load currency_extras %}
+<tr>
+    <th scope="col"></th>
+    <th scope="col">{{ item.name }}</th>
+    <th scope="col">{{ item.product.get_price|currencier }}</th>
+    <th scope="col">{{ item.get_q }}</th>
+    <th scope="col">{{ item.calculate_total|currencier }}</th>
+</tr>

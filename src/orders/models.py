@@ -1,7 +1,11 @@
+import locale
+from decimal import Decimal
 from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
-from decimal import Decimal
+
+
+locale.setlocale(locale.LC_ALL, 'es_ar')
 
 
 class Order(models.Model):
@@ -44,6 +48,29 @@ class Order(models.Model):
     def get_absolute_url(self):
         return reverse("orders:order-detail", kwargs={"id": self.id})
 
+    def get_balances(self, items, fabrics, payments):
+        items_total = Decimal(0)
+        for item in items:
+            items_total += item.calculate_total()
+
+        fabrics_total = Decimal(0)
+        for fabric in fabrics:
+            fabrics_total += fabric.total()
+
+        payments_total = Decimal(0)
+        for payment in payments:
+            payment.get_amount()
+
+        total = items_total + fabrics_total
+        left_balance = total - payments_total
+        return {
+            'items_total': items_total,
+            'fabrics_total': fabrics_total,
+            'total': total,
+            'payments_total': payments_total+Decimal(0),
+            'left_balance': left_balance,
+        }
+
     def __str__(self):
         return f'{self.id}-{self.creation_date}'
 
@@ -70,136 +97,28 @@ class Item(models.Model):
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name='items')
 
-    component_1_raw_material = models.ForeignKey(
-        "costs.Cost", verbose_name="Materia prima componente 1",
-        on_delete=models.CASCADE, default=None, blank=True, null=True,
-        related_name="item_raw_material_comp_1")
-    component_1_multiply_by = models.CharField(
-        max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
-    component_1_factor = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-    component_1_tolerance = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-
-    component_2_raw_material = models.ForeignKey(
-        "costs.Cost", verbose_name="Materia prima componente 2",
-        on_delete=models.CASCADE, default=None, blank=True, null=True,
-        related_name="item_raw_material_comp_2")
-    component_2_multiply_by = models.CharField(
-        max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
-    component_2_factor = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-    component_2_tolerance = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-
-    component_3_raw_material = models.ForeignKey(
-        "costs.Cost", verbose_name="Materia prima componente 3",
-        on_delete=models.CASCADE, default=None, blank=True, null=True,
-        related_name="item_raw_material_comp_3")
-    component_3_multiply_by = models.CharField(
-        max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
-    component_3_factor = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-    component_3_tolerance = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-
-    making_cost = models.ForeignKey(
-        "costs.Cost", verbose_name="Costo confección",
-        on_delete=models.CASCADE, default=None, blank=True, null=True,
-        related_name="item_making_cost")
-    making_multiply_by = models.CharField(
-        max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
-    making_factor = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
-    making_tolerance = models.DecimalField(
-        default=None, blank=True, null=True,
-        max_digits=50, decimal_places=2)
+    product = models.ForeignKey(
+        'products.Product', on_delete=models.CASCADE, null=False)
 
     width = models.DecimalField(
-        max_digits=10, decimal_places=2, default=Decimal(0))
+        max_digits=10, decimal_places=2, default=0)
     height = models.DecimalField(
-        max_digits=10, decimal_places=2, default=Decimal(0))
+        max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(
         default=1, validators=[MinValueValidator(1), MaxValueValidator(9999)])
 
-    def get_height(self):
-        h = 0 if self.height != "" or self.height is not None else self.height
-        return Decimal(h)
-
     def get_width(self):
-        w = 0 if self.width != "" or self.width is not None else self.width
-        return Decimal(w)
+        return Decimal(self.width)
 
-    def get_perimeter(self):
-        return (self.get_width()*2) + (self.get_height()*2)
-
-    def components_as_keys(self):
-        return [
-            {
-                'raw_material': self.component_1_raw_material,
-                'multiply_by': self.component_1_multiply_by,
-                'factor': self.component_1_factor,
-                'tolerance': self.component_1_tolerance,
-            }, {
-                'raw_material': self.component_2_raw_material,
-                'multiply_by': self.component_2_multiply_by,
-                'factor': self.component_2_factor,
-                'tolerance': self.component_2_tolerance,
-            }, {
-                'raw_material': self.component_3_raw_material,
-                'multiply_by': self.component_3_multiply_by,
-                'factor': self.component_3_factor,
-                'tolerance': self.component_3_tolerance,
-            }, {
-                'raw_material': self.making_cost,
-                'multiply_by': self.making_multiply_by,
-                'factor': self.making_factor,
-                'tolerance': self.making_tolerance,
-            },
-        ]
+    def get_height(self):
+        return Decimal(self.height)
 
     def calculate_total(self):
-        components = self.components_as_keys()
-        total = Decimal(0)
-        for component in components:
-            total += self.get_component_total(component)
-        return total
+        price = self.product.get_price(self.get_width(), self.get_height())
+        return price * self.quantity
 
-    def get_component_total(self, comp):
-        material = comp['raw_material']
-        if material is None:
-            return Decimal(0)
-
-        mult_by = comp['multiply_by']
-        if mult_by is self.NONE:
-            return Decimal(material.price)
-
-        factor = comp['factor']
-        measure = self.get_measures()[mult_by]
-
-        if factor == 1:
-            return material.price * measure
-
-        tolerance = comp['tolerance']
-        times_it_fits = int(measure/factor)
-
-        intolerant = measure - (times_it_fits * factor) > tolerance
-        result = material * (times_it_fits+1 if intolerant else times_it_fits)
-        return Decimal(result)
-
-    def get_measures(self):
-        return {
-            self.WIDTH: self.get_width(),
-            self.HEIGHT: self.get_height(),
-            self.PERIMETER: self.get_perimeter(),
-        }
+    def get_q(self):
+        return f'{self.quantity} unidades'
 
     def __str__(self):
         return self.name
@@ -223,6 +142,9 @@ class Fabric(models.Model):
         s = Decimal(self.size)
         return pps * s
 
+    def get_q(self):
+        return f'{self.size} meters'
+
     def __str__(self):
         return self.name
 
@@ -235,9 +157,12 @@ class Payment(models.Model):
     amount = models.DecimalField(max_digits=50, decimal_places=2)
     date = models.DateField(
         verbose_name="date", default=None)
-    order = models.ForeignKey("orders.Order", verbose_name="order",
-                              on_delete=models.CASCADE,
-                              related_name='payments')
+    order = models.ForeignKey(
+        "orders.Order", verbose_name="order",
+        on_delete=models.CASCADE, related_name='payments')
+
+    def get_amount(self):
+        return Decimal(self.amount)
 
     def __str__(self):
         if self.date:

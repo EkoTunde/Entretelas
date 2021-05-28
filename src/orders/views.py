@@ -7,8 +7,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Order
-from .forms import OrderModelForm
+from .models import Order  # , Item
+from .forms import OrderModelForm, ItemModelForm
 
 
 class OrderCreateView(CreateView):
@@ -37,15 +37,22 @@ class OrderDetailView(DetailView):
 
 def get_order_detail_view(request, id, *args, **kwargs):
     order = get_object_or_404(Order, id=id)
+    items = order.items.all()
+    print(items)
+    fabrics = order.fabrics.all()
+    payments = order.payments.all()
+    balances = order.get_balances(items, fabrics, payments)
     context = {
-        "order": order
+        "order": order,
+        'items': items,
+        'fabrics': fabrics,
+        'items_total': balances['items_total'],
+        'fabrics_total': balances['fabrics_total'],
+        'total': balances['total'],
+        'payments_total': balances['payments_total'],
+        'left_balance': balances['left_balance'],
     }
     return render(request, 'orders/order_detail.html', context)
-
-
-# def get_total(items, fabrics):
-#     items = [Decimal()]
-#     return 0
 
 
 class OrderUpdateView(UpdateView):
@@ -70,3 +77,15 @@ class OrderDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('orders:orders-list')
+
+
+class ItemCreateView(CreateView):
+    template_name = 'orders/item_create.html'
+    form_class = ItemModelForm
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(ItemCreateView, self).get_initial(**kwargs)
+        id_ = self.kwargs.get("id")
+        order = Order.objects.get(id=id_)
+        initial['order'] = order
+        return initial
