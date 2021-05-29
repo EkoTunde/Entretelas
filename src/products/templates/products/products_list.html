@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h3>Productos</h3>
+{% if object_list|length > 0 %}
+<div>
+    <table class="table table-hover w-auto">
+        <thead class=" table-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for instance in object_list %}
+            {% include 'products/snippets/product_item.html' with product=instance %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p>
+    No se agregaron productos. Podés agregar uno haciendo click <a href="{% url 'products:product-create' %}">aquí</a>.
+</p>
+{% endif %}
+
+{% endblock content %}

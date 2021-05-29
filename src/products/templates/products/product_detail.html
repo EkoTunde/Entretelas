@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load currency_extras %}
+
+<h3>{{ object.name }}</h3>
+<hr style="max-width: 800px;">
+
+
+<!-- COSTO CONFECCIÓN -->
+{% if object.making_cost > 0 %}
+<p>
+    <strong>Costo confección:</strong> {{ object.making_cost|currencier }}
+    {% if object.making_multiplier != 'NA' %}
+    x {{ object.get_making_multiplier_display }}
+    {% if object.making_factor != 1 %}
+    /{{ object.making_factor }}
+    {% if object.making_tolerance > 0 %}
+    @{{ object.making_tolerance }}
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</p>
+{% endif %}
+
+
+<!-- COMPONENTE N°1 -->
+{% if object.material_1 %}
+<p>
+    <strong>Componente N°1:</strong> {{ object.material_1.name }} {{ object.material_1.price|currencier }}
+    {% if object.multiplier_1 != 'NA' %}
+    x {{ object.get_multiplier_1_display }}
+    {% if object.factor_1 != 1 %}
+    /{{ object.factor_1 }}
+    {% if object.tolerance_1 > 0 %}
+    @{{ object.tolerance_1 }}
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</p>
+{% endif %}
+
+
+<!-- COMPONENTE N°2 -->
+{% if object.material_2 %}
+<p>
+    <strong>Componente N°2:</strong> {{ object.material_2.name }} {{ object.material_2.price|currencier }}
+    {% if object.multiplier_2 != 'NA' %}
+    x {{ object.get_multiplier_2_display }}
+    {% if object.factor_2 != 1 %}
+    /{{ object.factor_2 }}
+    {% if object.tolerance_2 > 0 %}
+    @{{ object.tolerance_2 }}
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</p>
+{% endif %}
+
+
+<!-- COMPONENTE N°3 -->
+{% if object.material_3 %}
+<p>
+    <strong>Componente N°3</strong> {{ object.material_3.name }} {{ object.material_3.price|currencier }}
+    {% if object.multiplier_3 != 'NA' %}
+    x {{ object.get_multiplier_3_display }}
+    {% if object.factor_3 != 1 %}
+    /{{ object.factor_3 }}
+    {% if object.tolerance_3 > 0 %}
+    @{{ object.tolerance_3 }}
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</p>
+{% endif %}
+<hr style="max-width: 800px;">
+
+<button onclick="location.href = '{% url 'products:product-update' id=object.id %}'"
+    class="btn btn-primary">Editar</button>
+<button onclick="location.href = '{% url 'products:product-delete' id=object.id %}'"
+    class="btn btn-danger">Eliminar</button>
+<a href='../'> Volver</a>
+
+{% endblock %}

@@ -4,7 +4,7 @@
 
 
 <form action='.' method='POST'>{% csrf_token %}
-    <h1>¿Querés eliminar el presupuesto?"{{ object.name }}"?</h1>
+    <h1>¿Querés eliminar el presupuesto "{{ object.name }}"?</h1>
     <p><input type='submit' value='Sí' /> <a href='../'>Cancelar</a></p>
 
 </form>

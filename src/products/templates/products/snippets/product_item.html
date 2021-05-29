@@ -1,0 +1,10 @@
+<style>
+    .td {
+        word-wrap: break-word;
+    }
+</style>
+
+<tr>
+    <th scope="row">{{ instance.id }}</th>
+    <td><a href="{% url 'products:product-detail' id=instance.id %}">{{ instance.name }}</a></td>
+</tr>

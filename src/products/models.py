@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.db import models
+from django.urls import reverse
 
 
 class Product(models.Model):
@@ -9,7 +10,7 @@ class Product(models.Model):
     PERIMETER = 'P'
     NONE = 'NA'
     MULTIPLIERS_CHOICES = [
-        (HEIGHT, 'Alto'),
+        (HEIGHT, 'Largo'),
         (WIDTH, 'Ancho'),
         (PERIMETER, 'Perímetro'),
         (NONE, 'Nada'),
@@ -22,10 +23,13 @@ class Product(models.Model):
         verbose_name="Costo confección",
         max_digits=50, decimal_places=2, default=0)
     making_multiplier = models.CharField(
+        verbose_name="Factor medida multiplicadora costo confección",
         max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
     making_factor = models.DecimalField(
+        verbose_name="Factor costo confección",
         default=None, blank=True, null=True, max_digits=50, decimal_places=2)
     making_tolerance = models.DecimalField(
+        verbose_name="Tolerancia costo confección",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
 
@@ -35,11 +39,14 @@ class Product(models.Model):
         on_delete=models.CASCADE, default=None, blank=True, null=True,
         related_name="prod_raw_material_comp_1")
     multiplier_1 = models.CharField(
+        verbose_name="Factor medida multiplicadora componente 1",
         max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
     factor_1 = models.DecimalField(
+        verbose_name="Factor componente 1",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
     tolerance_1 = models.DecimalField(
+        verbose_name="Tolerancia componente 1",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
 
@@ -49,11 +56,14 @@ class Product(models.Model):
         on_delete=models.CASCADE, default=None, blank=True, null=True,
         related_name="prod_raw_material_comp_2")
     multiplier_2 = models.CharField(
+        verbose_name="Factor medida multiplicadora componente 2",
         max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
     factor_2 = models.DecimalField(
+        verbose_name="Factor componente 2",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
     tolerance_2 = models.DecimalField(
+        verbose_name="Tolerancia componente 2",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
 
@@ -63,11 +73,14 @@ class Product(models.Model):
         on_delete=models.CASCADE, default=None, blank=True, null=True,
         related_name="prod_raw_material_comp_3")
     multiplier_3 = models.CharField(
+        verbose_name="Factor medida multiplicadora componente 3",
         max_length=2, choices=MULTIPLIERS_CHOICES, default=NONE)
     factor_3 = models.DecimalField(
+        verbose_name="Factor componente 3",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
     tolerance_3 = models.DecimalField(
+        verbose_name="Tolerancia componente 3",
         default=None, blank=True, null=True,
         max_digits=50, decimal_places=2)
 
@@ -82,32 +95,32 @@ class Product(models.Model):
     def components_as_dicts(self):
         result = []
 
-        if self.material_1 is not None:
-            comp_1 = self.dictify(
-                self.material_1, self.multiplier_1,
-                self.factor_1, self.tolerance_1)
-            result.append(comp_1)
-
-        if self.material_2 is not None:
-            comp_2 = self.dictify(
-                self.material_2, self.multiplier_2,
-                self.factor_2, self.tolerance_2)
-            result.append(comp_2)
-
-        if self.material_3 is not None:
-            comp_3 = self.dictify(
-                self.material_3, self.multiplier_3,
-                self.factor_3, self.tolerance_3)
-            result.append(comp_3)
-
         making = self.dictify(
             self.making_cost, self.making_multiplier,
             self.making_factor, self.making_tolerance)
         result.append(making)
 
+        if self.material_1 is not None:
+            comp_1 = self.dictify(
+                self.material_1.price, self.multiplier_1,
+                self.factor_1, self.tolerance_1)
+            result.append(comp_1)
+
+        if self.material_2 is not None:
+            comp_2 = self.dictify(
+                self.material_2.price, self.multiplier_2,
+                self.factor_2, self.tolerance_2)
+            result.append(comp_2)
+
+        if self.material_3 is not None:
+            comp_3 = self.dictify(
+                self.material_3.price, self.multiplier_3,
+                self.factor_3, self.tolerance_3)
+            result.append(comp_3)
+
         return result
 
-    def get_component_total(self, component: dict, **measures):
+    def get_component_total(self, component: dict, measures: dict):
         cost = component['cost']
 
         mult_by = component['multiplier']
@@ -123,7 +136,7 @@ class Product(models.Model):
         tolerance = component['tolerance']
         times_it_fits = int(measure/factor)
 
-        if measure - (times_it_fits * factor) > tolerance:  # Tolerance exceded
+        if measure - (times_it_fits * factor) > tolerance:
             times_it_fits += 1
         return Decimal(cost * times_it_fits)
 
@@ -131,10 +144,28 @@ class Product(models.Model):
         total = Decimal(0)
         for component in self.components_as_dicts():
             subtotal = self.get_component_total(
-                component, width=width, height=height,
-                perimeter=self.get_perimeter(width, height))
+                component, self.get_measures_dict(width, height))
             total += subtotal
+        print(total)
         return total
 
     def get_perimeter(self, width, height):
         return (width * Decimal(2)) + (height * Decimal(2))
+
+    def get_measures_dict(self, width, height):
+        return {
+            self.HEIGHT: height,
+            self.WIDTH: width,
+            self.PERIMETER: self.get_perimeter(width, height),
+            self.NONE: Decimal(0)
+        }
+
+    def get_absolute_url(self):
+        return reverse("products:product-detail", kwargs={"id": self.id})
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Product"
+        verbose_name_plural = "Products"

@@ -1,11 +1,10 @@
 from costs.models import Cost
 
 
-def load_moc_data_to_DB(name, price, category):
+def load_moc_data_to_DB(name, price):
     Cost.objects.create(
         name=name,
         price=price,
-        category=category,
     )
 
 
@@ -27,4 +26,4 @@ DATA = [
 
 def load_all():
     for name, price in DATA:
-        load_moc_data_to_DB(name, price, Cost.RAW_MATERIAL)
+        load_moc_data_to_DB(name, price)

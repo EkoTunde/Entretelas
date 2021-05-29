@@ -50,8 +50,11 @@ class Order(models.Model):
 
     def get_balances(self, items, fabrics, payments):
         items_total = Decimal(0)
+        items_prices = {}
         for item in items:
-            items_total += item.calculate_total()
+            t = item.calculate_total()
+            items_total += t
+            items_prices[item.id] = t
 
         fabrics_total = Decimal(0)
         for fabric in fabrics:
@@ -65,6 +68,7 @@ class Order(models.Model):
         left_balance = total - payments_total
         return {
             'items_total': items_total,
+            'items_prices': items_prices,
             'fabrics_total': fabrics_total,
             'total': total,
             'payments_total': payments_total+Decimal(0),
@@ -81,31 +85,31 @@ class Order(models.Model):
 
 class Item(models.Model):
 
-    HEIGHT = 'AL'
-    WIDTH = 'AN'
-    PERIMETER = 'PE'
+    HEIGHT = 'H'
+    WIDTH = 'W'
+    PERIMETER = 'P'
     NONE = 'NA'
     MULTIPLIERS_CHOICES = [
-        (HEIGHT, 'Alto'),
+        (HEIGHT, 'Largo'),
         (WIDTH, 'Ancho'),
         (PERIMETER, 'Perímetro'),
         (NONE, 'Nada'),
     ]
 
-    name = models.CharField(max_length=150)
-
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name='items')
 
     product = models.ForeignKey(
-        'products.Product', on_delete=models.CASCADE, null=False)
+        'products.Product', verbose_name='Producto',
+        on_delete=models.CASCADE, null=False)
 
-    width = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0)
     height = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0)
+        verbose_name='Largo', max_digits=10, decimal_places=2, default=0)
+    width = models.DecimalField(
+        verbose_name='Ancho', max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(
-        default=1, validators=[MinValueValidator(1), MaxValueValidator(9999)])
+        verbose_name='Cantidad', default=1,
+        validators=[MinValueValidator(1), MaxValueValidator(9999)])
 
     def get_width(self):
         return Decimal(self.width)
@@ -115,13 +119,20 @@ class Item(models.Model):
 
     def calculate_total(self):
         price = self.product.get_price(self.get_width(), self.get_height())
+        self.price = price,
         return price * self.quantity
+
+    def get_price(self):
+        return self.price
+
+    # def get_absolute_url(self):
+    #     return reverse("orders:order-detail", kwargs={"id": self.id})
 
     def get_q(self):
         return f'{self.quantity} unidades'
 
     def __str__(self):
-        return self.name
+        return f'{self.product.name} ({self.get_width()}x{self.get_height()}m)'
 
     class Meta:
         verbose_name = "Item"

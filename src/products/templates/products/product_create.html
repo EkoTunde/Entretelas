@@ -9,11 +9,11 @@
 </style>
 
 <div class="cont">
-    <h3>Nuevo pedido</h3>
-    <h5>Datos del/de la cliente</h5>
+    <h3>Nuevo Producto</h3>
     <form action='.' method='POST'>{% csrf_token %}
         {{ form.as_p }}
-        <input type='submit' value='Guardar' />
+        <input type='submit' class="btn btn-success" value='Guardar' />
+        <a class="btn btn-secondary" href='../'>Cancelar</a>
     </form>
 </div>
 

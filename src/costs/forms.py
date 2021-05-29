@@ -9,5 +9,4 @@ class CostModelForm(forms.ModelForm):
         fields = [
             'name',
             'price',
-            'category',
         ]

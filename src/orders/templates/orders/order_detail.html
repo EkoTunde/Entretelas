@@ -40,7 +40,8 @@
 
 
 <!-- DATOS CLIENTES -->
-<h5>Datos del/de la cliente <span><button>Editar</button></span></h5>
+<h5>Datos del/de la cliente <span><button
+            onclick="location.href='{% url 'orders:order-update' id=order.id %}';">Editar</button></span></h5>
 <p><b>Nombre y apellido:</b> {{ order.customer_first_name }} {{ order.customer_last_name }}</p>
 <p><b>Email:</b> <a href="mailto:{{ order.customer_email }}">{{ order.customer_email }}</a></p>
 <p><b>Teléfono:</b> {{ order.customer_tel }}</p>
@@ -69,6 +70,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <p><a href="{% url 'orders:order-add-item' id=order.id %}">Agregas más</a></p>
     <p><b>Subtotal:</b> {{ items_total|currencier }}</p>
 </div>
 {% else %}

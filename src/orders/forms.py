@@ -15,10 +15,25 @@ class OrderModelForm(forms.ModelForm):
 
 
 class ItemModelForm(forms.ModelForm):
+
+    order = forms.Field(required=True, disabled=True)
+
     class Meta:
         model = Item
         fields = [
-            # 'order',
+            'order',
+            'product',
+            'width',
+            'height',
+            'quantity',
+        ]
+
+
+class ItemUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Item
+        fields = [
             'product',
             'width',
             'height',

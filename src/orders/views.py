@@ -7,8 +7,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Order  # , Item
-from .forms import OrderModelForm, ItemModelForm
+from .models import Order, Item
+from .forms import OrderModelForm, ItemModelForm, ItemUpdateForm
 
 
 class OrderCreateView(CreateView):
@@ -47,6 +47,7 @@ def get_order_detail_view(request, id, *args, **kwargs):
         'items': items,
         'fabrics': fabrics,
         'items_total': balances['items_total'],
+        'items_prices': balances['items_prices'],
         'fabrics_total': balances['fabrics_total'],
         'total': balances['total'],
         'payments_total': balances['payments_total'],
@@ -83,9 +84,42 @@ class ItemCreateView(CreateView):
     template_name = 'orders/item_create.html'
     form_class = ItemModelForm
 
-    def get_initial(self, *args, **kwargs):
+    def get_initial(self, **kwargs):
         initial = super(ItemCreateView, self).get_initial(**kwargs)
         id_ = self.kwargs.get("id")
         order = Order.objects.get(id=id_)
         initial['order'] = order
         return initial
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class ItemDeleteView(DeleteView):
+    template_name = 'orders/item_delete.html'
+
+    def get_object(self):
+        item_id_ = self.kwargs.get("item")
+        return get_object_or_404(Item, id=item_id_)
+
+    def get_success_url(self):
+        print(self.object.order.id)
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class ItemUpdateView(UpdateView):
+    template_name = 'orders/item_update.html'
+    form_class = ItemUpdateForm
+
+    def get_object(self):
+        item_id_ = self.kwargs.get("item")
+        return get_object_or_404(Item, id=item_id_)
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
