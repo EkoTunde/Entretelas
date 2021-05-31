@@ -3,29 +3,51 @@ from .views import (
     ItemCreateView,
     ItemDeleteView,
     ItemUpdateView,
+    FabricCreateView,
+    FabricDeleteView,
+    FabricUpdateView,
     OrderCreateView,
     OrdersListView,
     OrderDeleteView,
     # OrderDetailView,
     OrderUpdateView,
     get_order_detail_view,
+    PaymentCreateView,
+    PaymentDeleteView,
+    PaymentUpdateView,
 )
 
 app_name = 'orders'
 urlpatterns = [
+
+    # Order
     path('', OrdersListView.as_view(), name='orders-list'),
     path('create/', OrderCreateView.as_view(), name='order-create'),
     path('<int:id>/', get_order_detail_view, name='order-detail'),
     path('<int:id>/update/', OrderUpdateView.as_view(), name='order-update'),
     path('<int:id>/delete/', OrderDeleteView.as_view(), name='order-delete'),
+
+    # Items
     path('<int:id>/add-item/', ItemCreateView.as_view(),
          name='order-add-item'),
     path('<int:id>/delete-item/<int:item>', ItemDeleteView.as_view(),
          name='order-delete-item'),
     path('<int:id>/update-item/<int:item>', ItemUpdateView.as_view(),
          name='order-update-item'),
-    #     path(r'^(?P<id>[0-9]+)$/delete-item/(?P<item>[0-9]+)$',
-    #          ItemDeleteView.as_view(), name='order-delete-item'),
-    #  path('<int:id>/add-fabric/', OrderDeleteView.as_view(),
-    #  name='order-add-fabric'),
+
+    # Fabrics
+    path('<int:id>/add-fabric/', FabricCreateView.as_view(),
+         name='order-add-fabric'),
+    path('<int:id>/delete-fabric/<int:fabric>', FabricDeleteView.as_view(),
+         name='order-delete-fabric'),
+    path('<int:id>/update-fabric/<int:fabric>', FabricUpdateView.as_view(),
+         name='order-update-fabric'),
+
+    # Payments
+    path('<int:id>/add-payment/', PaymentCreateView.as_view(),
+         name='order-add-payment'),
+    path('<int:id>/delete-payment/<int:payment>', PaymentDeleteView.as_view(),
+         name='order-delete-payment'),
+    path('<int:id>/update-payment/<int:payment>', PaymentUpdateView.as_view(),
+         name='order-update-payment'),
 ]

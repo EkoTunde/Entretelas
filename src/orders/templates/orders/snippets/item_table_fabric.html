@@ -1,7 +1,12 @@
+{% load currency_extras %}
 <tr>
-    <th scope="col"></th>
-    <th scope="col">{{ fabric.name }}</th>
-    <th scope="col">{{ fabric.price_per_size }}</th>
-    <th scope="col">{{ fabric.get_q }}</th>
-    <th scope="col">{{ fabric.total }}</th>
+    <th scope="col">
+        <a href="{% url 'orders:order-update-fabric' id=fabric.order.id fabric=fabric.id %}">{{ fabric }}</a>
+    </th>
+    <td scope="col">{{ fabric.price_per_size|currencier }}</td>
+    <td scope="col">{{ fabric.get_q }}</td>
+    <td scope="col">{{ fabric.total|currencier }}</td>
+    <td scope="col">
+        <a href="{% url 'orders:order-delete-fabric' id=fabric.order.id fabric=fabric.id %}">Eliminar</a>
+    </td>
 </tr>

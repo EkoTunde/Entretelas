@@ -48,7 +48,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Bootstrap
+    'bootstrap4',
+    'django_forms_bootstrap',
+    'bootstrap_datepicker_plus',
 ]
+
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
+
 
 AUTH_USER_MODEL = 'account.Account'
 
@@ -133,3 +144,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_FILES_DIRS = [STATIC_DIR, ]

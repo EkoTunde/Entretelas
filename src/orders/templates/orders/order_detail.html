@@ -54,10 +54,9 @@
 <h5>Productos</h5>
 {% if items|length > 0 %}
 <div>
-    <table class="table table-hover w-auto">
+    <table class="table table-bordered table-hover w-auto">
         <thead class=" table-light">
             <tr>
-                <th scope="col"></th>
                 <th scope="col">Concepto</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Unidades</th>
@@ -83,13 +82,12 @@
 
 <!-- TELAS -->
 <h5>Telas</h5>
-{% if fabrics|length > 1 %}
+{% if fabrics|length > 0 %}
 <div>
-    <table class="table table-hover w-auto">
+    <table class="table table-bordered table-hover w-auto">
         <thead class=" table-light">
             <tr>
-                <th scope="col"></th>
-                <th scope="col">Concepto</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">Precio por metro</th>
                 <th scope="col">Metros</th>
                 <th scope="col">Total</th>
@@ -101,6 +99,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <p><a href="{% url 'orders:order-add-fabric' id=order.id %}">Agregas más</a></p>
     <p><b>Subtotal:</b> {{ fabrics_total|currencier }}</p>
 </div>
 {% else %}

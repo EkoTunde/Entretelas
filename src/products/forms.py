@@ -4,6 +4,24 @@ from .models import Product
 
 
 class ProductModelForm(forms.ModelForm):
+
+    making_tolerance = forms.DecimalField(
+        label='Tolerancia costo confección',
+        label_suffix=" (en porcentaje)",
+        required=False)
+    tolerance_1 = forms.DecimalField(
+        label='Tolerancia componente 1',
+        label_suffix=" (en porcentaje)",
+        required=False)
+    tolerance_2 = forms.DecimalField(
+        label='Tolerancia componente 2',
+        label_suffix=" (en porcentaje)",
+        required=False)
+    tolerance_3 = forms.DecimalField(
+        label='Tolerancia componente 3',
+        label_suffix=" (en porcentaje)",
+        required=False)
+
     class Meta:
         model = Product
         fields = [

@@ -97,7 +97,8 @@ class Item(models.Model):
     ]
 
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name='items')
+        Order, verbose_name='Pedido',
+        on_delete=models.CASCADE, related_name='items')
 
     product = models.ForeignKey(
         'products.Product', verbose_name='Producto',
@@ -132,7 +133,7 @@ class Item(models.Model):
         return f'{self.quantity} unidades'
 
     def __str__(self):
-        return f'{self.product.name} ({self.get_width()}x{self.get_height()}m)'
+        return f'{self.product.name} ({self.get_height()}x{self.get_width()}m)'
 
     class Meta:
         verbose_name = "Item"
@@ -141,12 +142,14 @@ class Item(models.Model):
 
 class Fabric(models.Model):
 
-    name = models.CharField(max_length=250)
-    price_per_size = models.DecimalField(max_digits=50, decimal_places=2)
-    size = models.DecimalField(max_digits=50, decimal_places=2)
+    name = models.CharField(verbose_name='Nombre', max_length=250)
+    price_per_size = models.DecimalField(
+        verbose_name='Precio por metro', max_digits=50, decimal_places=2)
+    size = models.DecimalField(
+        verbose_name='Metros (cantidad)', max_digits=50, decimal_places=2)
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE,
-        related_name='fabrics', default=None)
+        Order, verbose_name='Pedido',
+        on_delete=models.CASCADE, related_name='fabrics')
 
     def total(self):
         pps = Decimal(self.price_per_size)
@@ -165,11 +168,12 @@ class Fabric(models.Model):
 
 
 class Payment(models.Model):
-    amount = models.DecimalField(max_digits=50, decimal_places=2)
+    amount = models.DecimalField(
+        verbose_name='Importe', max_digits=50, decimal_places=2)
     date = models.DateField(
-        verbose_name="date", default=None)
+        verbose_name="Fecha", default=None)
     order = models.ForeignKey(
-        "orders.Order", verbose_name="order",
+        "orders.Order", verbose_name="Pedido",
         on_delete=models.CASCADE, related_name='payments')
 
     def get_amount(self):

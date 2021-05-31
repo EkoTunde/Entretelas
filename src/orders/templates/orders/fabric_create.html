@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
 
 <style type="text/css">
@@ -9,11 +10,10 @@
 </style>
 
 <div class="cont">
-    <h3>Nuevo pedido</h3>
-    <h5>Datos del/de la cliente</h5>
+    <h3>Nueva tela</h3>
     <form action='.' method='POST'>{% csrf_token %}
         {{ form.as_p }}
-        <input type='submit' value='Guardar' class='btn btn-success' />
+        <input type='submit' value='Agregar' class='btn btn-success' />
         <a href="../">Cancelar</a>
     </form>
 </div>

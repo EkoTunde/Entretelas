@@ -121,24 +121,27 @@ class Product(models.Model):
         return result
 
     def get_component_total(self, component: dict, measures: dict):
-        cost = component['cost']
+        cost = Decimal(component['cost'])
 
         mult_by = component['multiplier']
         if mult_by is self.NONE:
             return cost
 
-        factor = component['factor']
-        measure = measures[mult_by]
+        factor = Decimal(component['factor'])
+        measure = Decimal(measures[mult_by])
 
         if factor == 1:
             return cost * measure
 
-        tolerance = component['tolerance']
-        times_it_fits = int(measure/factor)
+        tolerance = Decimal(component['tolerance'])
+        times_it_fits = Decimal(int(measure/factor))
 
-        if measure - (times_it_fits * factor) > tolerance:
+        reminder = Decimal(measure) - Decimal(times_it_fits * factor)
+        percent_reminder = reminder * Decimal(100) / factor
+
+        if percent_reminder > tolerance:
             times_it_fits += 1
-        return Decimal(cost * times_it_fits)
+        return cost * times_it_fits
 
     def get_price(self, width, height):
         total = Decimal(0)
@@ -146,7 +149,6 @@ class Product(models.Model):
             subtotal = self.get_component_total(
                 component, self.get_measures_dict(width, height))
             total += subtotal
-        print(total)
         return total
 
     def get_perimeter(self, width, height):

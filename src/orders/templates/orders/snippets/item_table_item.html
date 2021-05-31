@@ -1,9 +1,12 @@
 {% load currency_extras %}
 <tr>
-    <th scope="col"></th>
-    <th scope="col"><a href="{% url 'orders:order-update-item' id=item.order.id item=item.id %}">{{ item }}</a></th>
-    <th scope="col">{{ item.get_price|currencier }}</th>
-    <th scope="col">{{ item.get_q }}</th>
-    <th scope="col">{{ item.calculate_total|currencier }}</th>
-    <th scope="col"><a href="{% url 'orders:order-delete-item' id=item.order.id item=item.id %}">Eliminar</a></th>
+    <th scope="col">
+        <a href="{% url 'orders:order-update-item' id=item.order.id item=item.id %}">{{ item }}</a>
+    </th>
+    <td scope="col">{{ item.get_price|currencier }}</td>
+    <td scope="col">{{ item.get_q }}</td>
+    <td scope="col">{{ item.calculate_total|currencier }}</td>
+    <td scope="col">
+        <a href="{% url 'orders:order-delete-item' id=item.order.id item=item.id %}">Eliminar</a>
+    </td>
 </tr>

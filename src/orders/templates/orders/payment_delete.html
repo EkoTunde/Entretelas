@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method='POST'>{% csrf_token %}
+    <div class="">
+        <div class="d-flex justify-content-center">
+            <h4>¿Querés eliminar el pago por "{{ object }}" del día {{ object }}?</h4>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+            <br>
+            <p><input type='submit' value='Sí, eliminar' class="btn btn-danger" /> <a href='../'>Cancelar</a></p>
+        </div>
+
+    </div>
+</form>
+
+{% endblock %}

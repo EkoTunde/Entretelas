@@ -7,8 +7,16 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Order, Item
-from .forms import OrderModelForm, ItemModelForm, ItemUpdateForm
+from .models import Order, Item, Fabric, Payment
+from .forms import (
+    OrderModelForm,
+    ItemModelForm,
+    ItemUpdateForm,
+    FabricModelForm,
+    FabricUpdateForm,
+    PaymentModelForm,
+    PaymentUpdateForm,
+)
 
 
 class OrderCreateView(CreateView):
@@ -116,6 +124,94 @@ class ItemUpdateView(UpdateView):
     def get_object(self):
         item_id_ = self.kwargs.get("item")
         return get_object_or_404(Item, id=item_id_)
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class FabricCreateView(CreateView):
+    template_name = 'orders/fabric_create.html'
+    form_class = FabricModelForm
+
+    def get_initial(self, **kwargs):
+        initial = super(FabricCreateView, self).get_initial(**kwargs)
+        id_ = self.kwargs.get("id")
+        order = Order.objects.get(id=id_)
+        initial['order'] = order
+        return initial
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class FabricDeleteView(DeleteView):
+    template_name = 'orders/fabric_delete.html'
+
+    def get_object(self):
+        fabric_id_ = self.kwargs.get("fabric")
+        return get_object_or_404(Fabric, id=fabric_id_)
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class FabricUpdateView(UpdateView):
+    template_name = 'orders/fabric_update.html'
+    form_class = FabricUpdateForm
+
+    def get_object(self):
+        fabric_id_ = self.kwargs.get("fabric")
+        return get_object_or_404(Fabric, id=fabric_id_)
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class PaymentCreateView(CreateView):
+    template_name = 'orders/payment_create.html'
+    form_class = PaymentModelForm
+
+    def get_initial(self, **kwargs):
+        initial = super(PaymentCreateView, self).get_initial(**kwargs)
+        id_ = self.kwargs.get("id")
+        order = Order.objects.get(id=id_)
+        initial['order'] = order
+        return initial
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class PaymentDeleteView(DeleteView):
+    template_name = 'orders/payment_delete.html'
+
+    def get_object(self):
+        payment_id_ = self.kwargs.get("payment")
+        return get_object_or_404(Payment, id=payment_id_)
+
+    def get_success_url(self):
+        return reverse('orders:order-detail',
+                       kwargs={'id': self.object.order.id})
+
+
+class PaymentUpdateView(UpdateView):
+    template_name = 'orders/payment_update.html'
+    form_class = PaymentUpdateForm
+
+    def get_object(self):
+        payment_id_ = self.kwargs.get("payment")
+        return get_object_or_404(Payment, id=payment_id_)
 
     def form_valid(self, form):
         return super().form_valid(form)
