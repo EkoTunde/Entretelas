@@ -1,6 +1,9 @@
 {% load currency_extras %}
 <tr>
     <th scope="row">
+        {{ counter }}
+    </th>
+    <th scope="row">
         <a href="{% url 'orders:order-update-fabric' id=fabric.order.id fabric=fabric.id %}">{{ fabric }}</a>
     </th>
     <td>{{ fabric.price_per_size|currencier }}</td>

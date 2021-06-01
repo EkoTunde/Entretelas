@@ -1,5 +1,7 @@
 {% load currency_extras %}
 <tr>
+
+    <th scope="row">{{ counter }}</th>
     <th scope="row">
         <a href="{% url 'orders:order-update-payment' id=payment.order.id payment=payment.id %}">
             {{ payment.date }}

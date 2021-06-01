@@ -80,7 +80,6 @@
             </tr>
         </tfoot>
     </table>
-    <p><a href="{% url 'orders:order-add-item' id=order.id %}">Agregas más</a></p>
 </div>
 {% else %}
 <p>Aun no agregaste ningún producto a la lista. Agregá uno haciendo click <a
@@ -94,26 +93,33 @@
 <h5>Telas</h5>
 {% if fabrics|length > 0 %}
 <div>
-    <table class="table">
-        <thead class=" table-light">
+    <table class="table table-striped w-auto">
+        <thead class="table-dark">
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Precio por metro</th>
                 <th scope="col">Metros</th>
                 <th scope="col">Total</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {% for fabric in fabrics %}
-            {% include 'orders/snippets/item_table_fabric.html' with fabric=fabric %}
+            {% include 'orders/snippets/item_table_fabric.html' with fabric=fabric counter=forloop.counter %}
             {% endfor %}
         </tbody>
-        <tfoot>
-            <td colspan='3'><b>Subtotal:</b></td>
-            <td>{{ fabrics_total|currencier }}</td>
+        <tfoot class="table-light">
+            <tr>
+                <th></th>
+                <td><a href="{% url 'orders:order-add-fabric' id=order.id %}">+Agregas más</a></td>
+                <th></th>
+                <th><b>Subtotal:</b></th>
+                <th>{{ fabrics_total|currencier }}</th>
+                <th></th>
+            </tr>
         </tfoot>
     </table>
-    <p><a href="{% url 'orders:order-add-fabric' id=order.id %}">Agregas más</a></p>
 </div>
 {% else %}
 <p>Aun no gastaste nada en telas. Agregá un gasto haciendo click <a
@@ -126,26 +132,31 @@
 <h5>Pagos</h5>
 {% if payments|length > 0 %}
 <div>
-    <table class="table table-bordered table-hover w-auto">
-        <thead class=" table-light">
+    <table class="table table-striped w-auto">
+        <thead class="table-dark">
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Medio de pago</th>
                 <th scope="col">Importe</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {% for payment in payments %}
-            {% include 'orders/snippets/item_table_payment.html' with payment=payment %}
+            {% include 'orders/snippets/item_table_payment.html' with payment=payment counter=forloop.counter %}
             {% endfor %}
         </tbody>
-        <tfoot>
-            <td colspan="2"><b>Subtotal:</b> </td>
-            <td>{{ payments_total|currencier }} </td>
+        <tfoot class="table-light">
+            <tr>
+                <th></th>
+                <th><a href="{% url 'orders:order-add-payment' id=order.id %}">+Registrar más</a></th>
+                <th><b>Subtotal:</b> </th>
+                <th>{{ payments_total|currencier }} </th>
+                <th></th>
+            </tr>
         </tfoot>
     </table>
-    <p><a href="{% url 'orders:order-add-payment' id=order.id %}">Registrar más</a></p>
-    <p><b>Subtotal:</b> {{ payments_total|currencier }}</p>
 </div>
 {% else %}
 <p>Aun no se registraron pagos. Agregá un pago haciendo click
