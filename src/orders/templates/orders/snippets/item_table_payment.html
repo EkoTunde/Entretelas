@@ -1,0 +1,15 @@
+{% load currency_extras %}
+<tr>
+    <th scope="row">
+        <a href="{% url 'orders:order-update-payment' id=payment.order.id payment=payment.id %}">
+            {{ payment.date }}
+        </a>
+    </th>
+    <td>{{ payment.get_method_display }}</td>
+    <td>{{ payment.amount|currencier }}</td>
+    <td>
+        <a href="{% url 'orders:order-delete-payment' id=payment.order.id payment=payment.id %}">
+            Eliminar
+        </a>
+    </td>
+</tr>

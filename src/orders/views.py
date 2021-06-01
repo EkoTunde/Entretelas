@@ -46,7 +46,6 @@ class OrderDetailView(DetailView):
 def get_order_detail_view(request, id, *args, **kwargs):
     order = get_object_or_404(Order, id=id)
     items = order.items.all()
-    print(items)
     fabrics = order.fabrics.all()
     payments = order.payments.all()
     balances = order.get_balances(items, fabrics, payments)
@@ -54,6 +53,7 @@ def get_order_detail_view(request, id, *args, **kwargs):
         "order": order,
         'items': items,
         'fabrics': fabrics,
+        'payments': payments,
         'items_total': balances['items_total'],
         'items_prices': balances['items_prices'],
         'fabrics_total': balances['fabrics_total'],
@@ -61,6 +61,7 @@ def get_order_detail_view(request, id, *args, **kwargs):
         'payments_total': balances['payments_total'],
         'left_balance': balances['left_balance'],
     }
+    print(context.get('payments_total'))
     return render(request, 'orders/order_detail.html', context)
 
 

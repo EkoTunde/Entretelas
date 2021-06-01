@@ -61,8 +61,10 @@ class Order(models.Model):
             fabrics_total += fabric.total()
 
         payments_total = Decimal(0)
+        print('payments', payments)
         for payment in payments:
-            payment.get_amount()
+            payments_total += payment.get_amount()
+            # print('payment something', payment.get_am)
 
         total = items_total + fabrics_total
         left_balance = total - payments_total
@@ -84,17 +86,6 @@ class Order(models.Model):
 
 
 class Item(models.Model):
-
-    HEIGHT = 'H'
-    WIDTH = 'W'
-    PERIMETER = 'P'
-    NONE = 'NA'
-    MULTIPLIERS_CHOICES = [
-        (HEIGHT, 'Largo'),
-        (WIDTH, 'Ancho'),
-        (PERIMETER, 'Perímetro'),
-        (NONE, 'Nada'),
-    ]
 
     order = models.ForeignKey(
         Order, verbose_name='Pedido',
@@ -168,10 +159,31 @@ class Fabric(models.Model):
 
 
 class Payment(models.Model):
+
+    CASH = "EF"
+    CARD = "CA"
+    CHECK = "CH"
+    DEPOSIT = "DE"
+    MERCADO_PAGO = "MP"
+    TRANSFER = "TR"
+
+    METHODS = [
+        (CASH, 'Efectivo'),
+        (CHECK, 'Cheque'),
+        (DEPOSIT, 'Depósito'),
+        (MERCADO_PAGO, 'MercadoPago'),
+        (CARD, 'Tarjeta'),
+        (TRANSFER, 'Transferencia Bancaria'),
+    ]
+
     amount = models.DecimalField(
-        verbose_name='Importe', max_digits=50, decimal_places=2)
-    date = models.DateField(
-        verbose_name="Fecha", default=None)
+        verbose_name='Importe', max_digits=50, decimal_places=2,
+        default=1)
+    date = models.DateField(verbose_name="Fecha", default=None)
+    method = models.CharField(
+        verbose_name="Medio de pago", max_length=2,
+        choices=METHODS, default=CASH
+    )
     order = models.ForeignKey(
         "orders.Order", verbose_name="Pedido",
         on_delete=models.CASCADE, related_name='payments')

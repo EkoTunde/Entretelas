@@ -1,6 +1,5 @@
 from django import forms
 from bootstrap_datepicker_plus import DatePickerInput
-from django.forms.widgets import TextInput
 from .models import Order, Item, Fabric, Payment
 
 
@@ -72,33 +71,42 @@ class FabricUpdateForm(forms.ModelForm):
 
 class PaymentModelForm(forms.ModelForm):
 
-    order = forms.Field(required=True, disabled=True)
-    amount = forms.DecimalField(label_suffix=': $', widget=TextInput())
     date = forms.DateField(
         label="Fecha:",
-        widget=DatePickerInput(format='%d/%m/%Y')
+        widget=DatePickerInput(options={
+            "format": "MM/DD/YYYY",  # moment date-time format
+            "showClose": True,
+            "showClear": True,
+            "showTodayButton": True,
+        })
     )
+    method = forms.ChoiceField(choices=Payment.METHODS)
+    amount = forms.DecimalField(label_suffix=': $',)
+    order = forms.Field(required=True, disabled=True)
 
     class Meta:
         model = Payment
         fields = [
-            'amount',
             'date',
+            'method',
+            'amount',
             'order',
         ]
 
 
 class PaymentUpdateForm(forms.ModelForm):
 
-    amount = forms.DecimalField(label_suffix=': $')
     date = forms.DateField(
         label="Fecha:",
         widget=DatePickerInput(format='%d/%m/%Y')
     )
+    method = forms.ChoiceField(choices=Payment.METHODS)
+    amount = forms.DecimalField(label_suffix=': $')
 
     class Meta:
         model = Payment
         fields = [
-            'amount',
             'date',
+            'method',
+            'amount',
         ]
