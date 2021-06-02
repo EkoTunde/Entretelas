@@ -74,7 +74,7 @@ class PaymentModelForm(forms.ModelForm):
     date = forms.DateField(
         label="Fecha:",
         widget=DatePickerInput(options={
-            "format": "MM/DD/YYYY",  # moment date-time format
+            "format": "DD/MM/YYYY",  # moment date-time format
             "showClose": True,
             "showClear": True,
             "showTodayButton": True,
@@ -98,7 +98,12 @@ class PaymentUpdateForm(forms.ModelForm):
 
     date = forms.DateField(
         label="Fecha:",
-        widget=DatePickerInput(format='%d/%m/%Y')
+        widget=DatePickerInput(options={
+            "format": "DD/MM/YYYY",  # moment date-time format
+            "showClose": True,
+            "showClear": True,
+            "showTodayButton": True,
+        })
     )
     method = forms.ChoiceField(choices=Payment.METHODS)
     amount = forms.DecimalField(label_suffix=': $')

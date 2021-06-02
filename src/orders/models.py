@@ -179,7 +179,8 @@ class Payment(models.Model):
     amount = models.DecimalField(
         verbose_name='Importe', max_digits=50, decimal_places=2,
         default=1)
-    date = models.DateField(verbose_name="Fecha", default=None)
+    date = models.DateField(verbose_name="Fecha",
+                            default=None, blank=True, null=True)
     method = models.CharField(
         verbose_name="Medio de pago", max_length=2,
         choices=METHODS, default=CASH

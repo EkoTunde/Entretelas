@@ -11,7 +11,13 @@
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 
-    <!-- Fengyuan Chen's Datepicker -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;300&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
+    <!-- <!-- Fengyuan Chen's Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css"
         integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"
@@ -26,13 +32,16 @@
 <body>
     <!-- Body -->
     <style type="text/css">
-        .main {
+        /*.main {
+        }*/
+        #wrapper {
+            background-color: #DADDCB;
+            padding: 30px;
             min-height: 100vh;
             height: 100%;
-            margin: 30px;
         }
     </style>
-    <div class="main">
+    <div class="container" id="wrapper">
         {% block content %}
 
         {% endblock content %}

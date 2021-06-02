@@ -3,9 +3,15 @@
 
 {% block content %}
 
+{% load bootstrap4 %} {# import bootstrap4/bootstrap3 #}
+{% bootstrap_javascript jquery='full' %} {# Embed Bootstrap JS+jQuery #}
+{{ form.media }} {# Adds date-picker required JS and CSS #}
+
 <style type="text/css">
     .cont {
         margin: 30px;
+        background-color: #f2f2f2;
+        max-width: 400px;
     }
 </style>
 
@@ -13,9 +19,10 @@
     <h3>Actualizar pago</h3>
     <form method='POST'>{% csrf_token %}
         {{ form.as_p }}
-        <input type='submit' value='Guardar' class="btn btn-success" />
+        <input type='submit' value='Guardar' class='btn btn-success' />
         <a href="../">Cancelar</a>
     </form>
+
 </div>
 
 {% endblock content %}
