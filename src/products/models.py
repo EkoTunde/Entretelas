@@ -95,10 +95,11 @@ class Product(models.Model):
     def components_as_dicts(self):
         result = []
 
-        making = self.dictify(
-            self.making_cost, self.making_multiplier,
-            self.making_factor, self.making_tolerance)
-        result.append(making)
+        if self.making_cost != 0:
+            making = self.dictify(
+                self.making_cost, self.making_multiplier,
+                self.making_factor, self.making_tolerance)
+            result.append(making)
 
         if self.material_1 is not None:
             comp_1 = self.dictify(
@@ -150,6 +151,15 @@ class Product(models.Model):
                 component, self.get_measures_dict(width, height))
             total += subtotal
         return total
+
+    def net_worth(self, width, height):
+        if self.making_cost == 0:
+            return 0
+        making = self.dictify(
+            self.making_cost, self.making_multiplier,
+            self.making_factor, self.making_tolerance)
+        measures = self.get_measures_dict(width, height)
+        return self.get_component_total(making, measures)
 
     def get_perimeter(self, width, height):
         return (width * Decimal(2)) + (height * Decimal(2))

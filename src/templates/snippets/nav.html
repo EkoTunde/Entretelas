@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand">Entretelas</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navContent"
+        aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'orders:orders-list' %}">Presupuestos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'products:products-list' %}">Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'costs:costs-list' %}">Costos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Calculadora</a>
+            </li>
+        </ul>
+        <div class="mt-2 mt-md-0">
+            <button class="btn btn-success my-2 my-sm-0" type="submit">Register</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+        </div>
+        {% comment %} <form class="form-inline mt-2 mt-md-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> {% endcomment %}
+    </div>
+</nav>

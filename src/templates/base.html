@@ -23,31 +23,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"
         integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 
-
-    {% include 'snippets/header.html' with cart_products_count=cart_products_count %}
     {% include 'snippets/base_css.html' %}
 
 </head>
 
 <body>
-    <!-- Body -->
     <style type="text/css">
-        /*.main {
-        }*/
-        #wrapper {
-            background-color: #DADDCB;
-            padding: 30px;
+        .main {}
+
+        .top-wrapper {
             min-height: 100vh;
             height: 100%;
+            //background-color: #DADDCB;
+            background-color: #fff;
+            border-radius: 25px;
+            padding: 3rem 1.5rem;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
         }
     </style>
-    <div class="container" id="wrapper">
+
+    {% include 'snippets/nav.html' %}
+
+    <main role="main" class="container top-wrapper">
         {% block content %}
-
         {% endblock content %}
-    </div>
-    <!-- End Body -->
-
+    </main>
 
     {% include 'snippets/footer.html' %}
 </body>

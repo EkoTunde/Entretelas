@@ -60,6 +60,7 @@ def get_order_detail_view(request, id, *args, **kwargs):
         'total': balances['total'],
         'payments_total': balances['payments_total'],
         'left_balance': balances['left_balance'],
+        'net_worth': balances['net_worth'],
     }
     return render(request, 'orders/order_detail.html', context)
 

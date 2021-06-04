@@ -2,30 +2,35 @@
 
 
 {% block content %}
+<div class="row justify-content-md-center">
+    <div class="col-md-auto">
+        <h3>Presupuestos en curso</h3>
+        {% if object_list|length > 0 %}
 
-<h3>Presupuestos en curso</h3>
-{% if object_list|length > 0 %}
-<div>
-    <table class="table table-hover w-auto">
-        <thead class=" table-light">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Nombre y Apellido</th>
-                <th scope="col">Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for instance in object_list %}
-            {% if instance.state != "FI" %}
-            {% include 'orders/snippets/item_order.html' with instance=instance %}
-            {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Nombre y Apellido</th>
+                    <th scope="col">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instance in object_list %}
+                {% if instance.state != "FI" %}
+                {% include 'orders/snippets/item_order.html' with instance=instance %}
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <p>No se agregaron presupuesto. Podés agregar uno haciendo click <a
+                href="{% url 'orders:order-create' %}">aquí</a>.
+        </p>
+        {% endif %}
+    </div>
 </div>
-{% else %}
-<p>No se agregaron presupuesto. Podés agregar uno haciendo click <a href="{% url 'orders:order-create' %}">aquí</a>.</p>
-{% endif %}
 
 {% endblock content %}

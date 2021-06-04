@@ -50,10 +50,13 @@ class Order(models.Model):
 
     def get_balances(self, items, fabrics, payments):
         items_total = Decimal(0)
+        net_worth = Decimal(0)
         items_prices = {}
         for item in items:
             t = item.calculate_total()
             items_total += t
+            nw = item.get_net_worth()
+            net_worth += nw
             items_prices[item.id] = t
 
         fabrics_total = Decimal(0)
@@ -75,6 +78,7 @@ class Order(models.Model):
             'total': total,
             'payments_total': payments_total+Decimal(0),
             'left_balance': left_balance,
+            'net_worth': net_worth,
         }
 
     def __str__(self):
@@ -116,6 +120,9 @@ class Item(models.Model):
 
     def get_price(self):
         return self.price
+
+    def get_net_worth(self):
+        return self.product.net_worth(self.get_width(), self.get_height())
 
     # def get_absolute_url(self):
     #     return reverse("orders:order-detail", kwargs={"id": self.id})
