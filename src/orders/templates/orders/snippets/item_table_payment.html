@@ -3,8 +3,9 @@
 <tr>
     <th scope="row">{{ counter }}</th>
     <th scope="row">
+        {% load tz %}
         <a href="{% url 'orders:order-update-payment' id=payment.order.id payment=payment.id %}">
-            {{ payment.date }}
+            {{ payment.date|date:"d/m/Y" }}
         </a>
     </th>
     <td>{{ payment.get_method_display }}</td>

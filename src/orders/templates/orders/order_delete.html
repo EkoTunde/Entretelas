@@ -3,11 +3,18 @@
 {% block content %}
 
 
-<form action='.' method='POST'>{% csrf_token %}
-    <h1>¿Querés eliminar el presupuesto "{{ object.name }}"?</h1>
-    <p><input type='submit' value='Sí' /> <a href='../'>Cancelar</a></p>
-
+<form method='POST'>{% csrf_token %}
+    <div class="">
+        <div class="d-flex justify-content-center">
+            <h1>¿Querés cancelar el presupuesto N.°{{ object.id }} a nombre de {{ object.customer_first_name }}
+                {{ object.customer_last_name }} creado el día {{ object.creation_date|date:"d/m/Y" }}?</h1>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+            <br>
+            <p><input type='submit' value='Sí, cancelar' class="btn btn-danger" /> <a href='../'>No, volver</a></p>
+        </div>
+    </div>
 </form>
-
 
 {% endblock %}

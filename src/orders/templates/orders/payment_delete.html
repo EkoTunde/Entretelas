@@ -7,7 +7,9 @@
 <form method='POST'>{% csrf_token %}
     <div class="">
         <div class="d-flex justify-content-center">
-            <h4>¿Querés eliminar el pago por {{ object.amount|currencier }} del día {{ object.date }}?</h4>
+            {% load tz %}
+            <h4>¿Querés eliminar el pago por {{ object.amount|currencier }} del día
+                {{ object.date|date:"d/m/Y" }}?</h4>
         </div>
         <br>
         <div class="d-flex justify-content-center">

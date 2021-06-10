@@ -7,7 +7,6 @@ from .views import (
     FabricDeleteView,
     FabricUpdateView,
     OrderCreateView,
-    OrdersListView,
     OrderDeleteView,
     # OrderDetailView,
     OrderUpdateView,
@@ -21,7 +20,6 @@ app_name = 'orders'
 urlpatterns = [
 
     # Order
-    path('', OrdersListView.as_view(), name='orders-list'),
     path('create/', OrderCreateView.as_view(), name='order-create'),
     path('<int:id>/', get_order_detail_view, name='order-detail'),
     path('<int:id>/update/', OrderUpdateView.as_view(), name='order-update'),

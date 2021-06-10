@@ -86,7 +86,7 @@ class OrderDeleteView(DeleteView):
         return get_object_or_404(Order, id=id_)
 
     def get_success_url(self):
-        return reverse('orders:orders-list')
+        return reverse('home')
 
 
 class ItemCreateView(CreateView):

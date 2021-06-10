@@ -2,20 +2,16 @@
 
 {% block content %}
 
-<style type="text/css">
-    .cont {
-        margin: 30px;
-    }
-</style>
-
-<div class="cont">
-    <h3>Nuevo pedido</h3>
-    <h5>Datos del/de la cliente</h5>
-    <form action='.' method='POST'>{% csrf_token %}
-        {{ form.as_p }}
-        <input type='submit' value='Guardar' class='btn btn-success' />
-        <a href="../">Cancelar</a>
-    </form>
+<div class="row justify-content-md-center">
+    <div>
+        <h3>Nuevo pedido</h3>
+        <h5>Datos del/de la cliente</h5>
+        <form action='.' method='POST'>{% csrf_token %}
+            {{ form.as_p }}
+            <input type='submit' value='Guardar' class='btn btn-success' />
+            <a href="../"> Cancelar</a>
+        </form>
+    </div>
 </div>
 
 {% endblock content %}

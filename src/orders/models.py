@@ -184,14 +184,12 @@ class Payment(models.Model):
     ]
 
     amount = models.DecimalField(
-        verbose_name='Importe', max_digits=50, decimal_places=2,
-        default=1)
-    date = models.DateField(verbose_name="Fecha",
-                            default=None, blank=True, null=True)
+        verbose_name='Importe', max_digits=50, decimal_places=2, default=1)
+    date = models.DateField(
+        verbose_name="Fecha", default=None, blank=True, null=True)
     method = models.CharField(
         verbose_name="Medio de pago", max_length=2,
-        choices=METHODS, default=CASH
-    )
+        choices=METHODS, default=CASH)
     order = models.ForeignKey(
         "orders.Order", verbose_name="Pedido",
         on_delete=models.CASCADE, related_name='payments')
@@ -205,5 +203,5 @@ class Payment(models.Model):
         return str(self.amount)
 
     class Meta:
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
+        verbose_name = "Pago"
+        verbose_name_plural = "Pagos"

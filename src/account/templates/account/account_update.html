@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<style type="text/css">
+    #update-successful {
+        color: #28A745;
+    }
+</style>
+
+<div class="row justify-content-md-center">
+    <div>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Desde:</strong> {{ user.date_joined }}</p>
+        <form action='.' method='POST'>{% csrf_token %}
+            {{ form.as_p }}
+            <input type='submit' value='Guardar' class='btn btn-success' />
+        </form>
+        {% if success == 1 %}
+        <p id="update-successful">
+            <strong>Actualizado con éxito!</strong>
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

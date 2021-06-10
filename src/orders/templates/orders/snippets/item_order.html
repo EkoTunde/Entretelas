@@ -30,4 +30,7 @@
         <a href='{{ instance.get_absolute_url }}'>{{ instance.creation_date|timezone:"America/Buenos_Aires" }}
         </a>
     </td>
+    <td>
+        {{ instance.expiration_date|date:"d/m/Y" }}
+    </td>
 </tr>
