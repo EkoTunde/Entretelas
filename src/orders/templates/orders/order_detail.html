@@ -257,7 +257,7 @@
         Fecha de vencimiento: {{ order.expiration_date|date:"d/m/Y" }}
         <button class="btn btn-primary">Reimprimir presupuesto</button>
         {% else %}
-        <button class="btn btn-primary" onclick="location.href='{% url 'orders:prueba' %}';">
+        <button class="btn btn-primary" onclick="location.href='{% url 'orders:prueba' id=order.id%}';">
             Imprimir presupuesto
         </button>
         {% endif %}

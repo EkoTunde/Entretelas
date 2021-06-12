@@ -51,6 +51,6 @@ urlpatterns = [
          name='order-update-payment'),
 
     # PDF
-    path('prueba', some_view, name="prueba"),
+    path('prueba/<int:id>', some_view, name="prueba"),
 
 ]

@@ -783,9 +783,11 @@
                     <p class="c10"><span class="c5 c45">CLIENTE</span></p>
                     <p class="c8 c26"><span class="c5 c45"></span></p>
                     <p class="c8 c26"><span class="c5 c12"></span></p>
-                    <p class="c10"><span class="c5 c12">{{nombre}}</span></p>
+                    <p class="c10"><span class="c5 c12">{{ order.customer_first_name }}
+                            {{ order.customer_last_name }}</span></p>
                     <p class="c8 c26"><span class="c5 c4"></span></p>
-                    <p class="c10"><span class="c4">{{client_info}}</span></p>
+                    <p class="c10"><span class="c4">{{order.customer_email}}</span></p>
+                    <p class="c10"><span class="c4">{{order.customer_tel}}</span></p>
                 </td>
             </tr>
         </tbody>
@@ -885,7 +887,7 @@
     <br>
     <p class="c13 c18"><span class="c2"></span></p>
     <p class="c13 c18"><span class="c2"></span></p>
-    <p class="c13"><span class="c2">* Este presupuesto tiene validez hasta el día {{fecha_vencimiento}}.</span>
+    <p class="c13"><span class="c2">* Este presupuesto tiene validez hasta el día {{order.expiration_date}}.</span>
     </p>
     <p class="c13"><span class="c32">** Una vez confirmado, se abona una seña del 50% por confección y el
             total de los materiales.</span></p>
