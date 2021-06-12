@@ -1,15 +1,901 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load currency_extras %}
+
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <style type="text/css">
+        @import url('https://themes.googleusercontent.com/fonts/css?kit=Lx1xfUTR4qFjwg0Z_pb902nprxIZebzXBW6jlOBrUjaRmjVylp_nXSS8n1Uw8NGLicz0c-PWKUrf6n-rDTmcSsOQzs8Y7lHL3WnNjtawT7iCrT-qfUzKBvIOpNoau91ZSoRvOzHiXXjrkp38I-z-_mZY2tnVZSLkVR80gyGdirg');
+
+        ol {
+            margin: 0;
+            padding: 0
+        }
+
+        table td,
+        table th {
+            padding: 0
+        }
+
+        .c19 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            background-color: #000000;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 303.8pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c37 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 0pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            background-color: #d9d9d9;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 96pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c53 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            background-color: #000000;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 106.5pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c38 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            background-color: #000000;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 96pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c0 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            background-color: #000000;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 60.8pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c44 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            background-color: #d9d9d9;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 106.5pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c1 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 0pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            background-color: #d9d9d9;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 303.8pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c27 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #ffffff;
+            border-top-width: 2.2pt;
+            border-right-width: 0pt;
+            border-left-color: #ffffff;
+            vertical-align: top;
+            border-right-color: #ffffff;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            background-color: #d9d9d9;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            width: 60.8pt;
+            border-top-color: #ffffff;
+            border-bottom-style: solid
+        }
+
+        .c33 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1.5pt;
+            border-right-width: 0pt;
+            border-left-color: #434343;
+            vertical-align: top;
+            border-right-color: #434343;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            width: 173.3pt;
+            border-top-color: #999999;
+            border-bottom-style: solid
+        }
+
+        .c54 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            width: 173.2pt;
+            border-top-color: #434343;
+            border-bottom-style: solid
+        }
+
+        .c11 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1.5pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 168.8pt;
+            border-top-color: #434343;
+            border-bottom-style: solid
+        }
+
+        .c24 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            width: 168.8pt;
+            border-top-color: #434343;
+            border-bottom-style: solid
+        }
+
+        .c9 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1.5pt;
+            border-right-width: 1.5pt;
+            border-left-color: #434343;
+            vertical-align: top;
+            border-right-color: #999999;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            width: 188.2pt;
+            border-top-color: #999999;
+            border-bottom-style: solid
+        }
+
+        .c21 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #999999;
+            border-top-width: 0pt;
+            border-right-width: 1.5pt;
+            border-left-color: #434343;
+            vertical-align: top;
+            border-right-color: #434343;
+            border-left-width: 1.5pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 188.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c49 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 173.2pt;
+            border-top-color: #434343;
+            border-bottom-style: solid
+        }
+
+        .c50 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1.5pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 173.2pt;
+            border-top-color: #434343;
+            border-bottom-style: solid
+        }
+
+        .c56 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 168.8pt;
+            border-top-color: #434343;
+            border-bottom-style: solid
+        }
+
+        .c7 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #999999;
+            border-top-width: 0pt;
+            border-right-width: 1.5pt;
+            border-left-color: #434343;
+            vertical-align: top;
+            border-right-color: #434343;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 566.3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c46 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #999999;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #434343;
+            vertical-align: top;
+            border-right-color: #434343;
+            border-left-width: 1.5pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1.5pt;
+            width: 204.8pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .c39 {
+            border-right-style: solid;
+            padding: 5pt 5pt 5pt 5pt;
+            border-bottom-color: #434343;
+            border-top-width: 1.5pt;
+            border-right-width: 0pt;
+            border-left-color: #999999;
+            vertical-align: top;
+            border-right-color: #434343;
+            border-left-width: 1.5pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            width: 204.8pt;
+            border-top-color: #999999;
+            border-bottom-style: solid
+        }
+
+        .c15 {
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 8pt;
+            font-family: "Montserrat";
+            font-style: normal
+        }
+
+        .c2 {
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Montserrat";
+            font-style: normal
+        }
+
+        .c13 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.15;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .c48 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.15;
+            orphans: 2;
+            widows: 2;
+            text-align: center
+        }
+
+        .c8 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: left;
+            height: 11pt
+        }
+
+        .c10 {
+            margin-left: 14.2pt;
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: left
+        }
+
+        .c16 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: right;
+            height: 11pt
+        }
+
+        .c29 {
+            margin-left: auto;
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-right: auto
+        }
+
+        .c5 {
+            color: #000000;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-style: normal
+        }
+
+        .c14 {
+            padding-top: 10pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: left
+        }
+
+        .c3 {
+            padding-top: 10pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: right
+        }
+
+        .c22 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: center
+        }
+
+        .c52 {
+            padding-top: 0pt;
+            padding-bottom: 10pt;
+            line-height: 1.0;
+            text-align: left
+        }
+
+        .c25 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: right
+        }
+
+        .c55 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            text-align: left
+        }
+
+        .c43 {
+            margin-left: 223.5pt;
+            border-spacing: 0;
+            border-collapse: collapse;
+            margin-right: auto
+        }
+
+        .c35 {
+            font-weight: 600;
+            font-size: 9pt;
+            font-family: "Montserrat"
+        }
+
+        .c4 {
+            font-size: 10pt;
+            font-family: "Montserrat";
+            font-weight: 400
+        }
+
+        .c17 {
+            font-weight: 600;
+            font-size: 10pt;
+            font-family: "Montserrat"
+        }
+
+        .c34 {
+            background-color: #ffffff;
+            max-width: 567.1pt;
+            padding: 28.3pt 14.2pt 48.4pt 14.2pt
+        }
+
+        .c12 {
+            font-weight: 700;
+            font-size: 10pt;
+            font-family: "Montserrat"
+        }
+
+        .c40 {
+            font-weight: 500;
+            font-size: 11pt;
+            font-family: "Montserrat"
+        }
+
+        .c23 {
+            font-weight: 700;
+            font-size: 9pt;
+            font-family: "Montserrat"
+        }
+
+        .c47 {
+            font-weight: 400;
+            font-size: 11pt;
+            font-family: "Helvetica Neue"
+        }
+
+        .c45 {
+            font-weight: 300;
+            font-size: 10pt;
+            font-family: "Montserrat"
+        }
+
+        .c42 {
+            font-weight: 800;
+            font-size: 11pt;
+            font-family: "Montserrat"
+        }
+
+        .c6 {
+            font-weight: 400;
+            font-size: 9pt;
+            font-family: "Montserrat"
+        }
+
+        .c30 {
+            font-weight: 400;
+            font-size: 11pt;
+            font-family: "Arial"
+        }
+
+        .c28 {
+            font-weight: 700;
+            font-size: 11pt;
+            font-family: "Montserrat"
+        }
+
+        .c32 {
+            font-weight: 400;
+            font-family: "Montserrat"
+        }
+
+        .c36 {
+            height: 6.2pt
+        }
+
+        .c31 {
+            height: 21.8pt
+        }
+
+        .c18 {
+            height: 11pt
+        }
+
+        .c51 {
+            height: 144.5pt
+        }
+
+        .c41 {
+            height: 16.6pt
+        }
+
+        .c20 {
+            height: 0pt
+        }
+
+        .c26 {
+            margin-left: 14.2pt
+        }
+
+        .title {
+            padding-top: 0pt;
+            color: #000000;
+            font-size: 26pt;
+            padding-bottom: 3pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .subtitle {
+            padding-top: 0pt;
+            color: #666666;
+            font-size: 15pt;
+            padding-bottom: 16pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        li {
+            color: #000000;
+            font-size: 11pt;
+            font-family: "Arial"
+        }
+
+        p {
+            margin: 0;
+            color: #000000;
+            font-size: 11pt;
+            font-family: "Arial"
+        }
+
+        h1 {
+            padding-top: 20pt;
+            color: #000000;
+            font-size: 20pt;
+            padding-bottom: 6pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h2 {
+            padding-top: 18pt;
+            color: #000000;
+            font-size: 16pt;
+            padding-bottom: 6pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h3 {
+            padding-top: 16pt;
+            color: #434343;
+            font-size: 14pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h4 {
+            padding-top: 14pt;
+            color: #666666;
+            font-size: 12pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h5 {
+            padding-top: 12pt;
+            color: #666666;
+            font-size: 11pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h6 {
+            padding-top: 12pt;
+            color: #666666;
+            font-size: 11pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            font-style: italic;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+    </style>
 </head>
 
-<body>
-
+<body class="c34">
+    <div>
+        <p class="c13"><span
+                style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 755.91px; height: 14.67px;"><img
+                    alt="" src="images/image1.png"
+                    style="width: 755.91px; height: 14.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+                    title=""></span></p>
+    </div>
+    <p class="c13 c18"><span class="c5 c30"></span></p>
+    <a id="t.2a34a5b6911fd45421657856bb574eee80537499"></a>
+    <a id="t.0"></a>
+    <table class="c29">
+        <tbody>
+            <tr class="c36">
+                <td class="c7" colspan="3" rowspan="1">
+                    <p class="c22"><span class="c17">FECHA: </span><span class="c4">{{order.creation_date}}</span><span
+                            class="c17"> - NÚMERO: </span><span class="c4">{{order.id}}</span></p>
+                </td>
+            </tr>
+            <tr class="c51">
+                <td class="c33" colspan="1" rowspan="1">
+                    <p class="c48"><span
+                            style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 184.72px; height: 199.96px;"><img
+                                alt="" src="images/image3.png"
+                                style="width: 184.72px; height: 199.96px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+                                title=""></span></p>
+                </td>
+                <td class="c9" colspan="1" rowspan="1">
+                    <p class="c8 c26"><span class="c5 c12"></span></p>
+                    <p class="c8 c26"><span class="c5 c12"></span></p>
+                    <p class="c8 c26"><span class="c5 c12"></span></p>
+                    <p class="c10"><span class="c5 c12">María Loreto Henning</span></p>
+                    <p class="c8 c26"><span class="c4 c5"></span></p>
+                    <p class="c10"><span class="c5 c4">Bella Vista</span></p>
+                    <p class="c10"><span class="c5 c4">Buenos Aires (Argentina)</span></p>
+                    <p class="c10"><span class="c5 c4">Tel. +54 9 11 5972-2765</span></p>
+                    <p class="c10"><span class="c5 c4">entretelas.mlh@gmail.com</span></p>
+                </td>
+                <td class="c39" colspan="1" rowspan="1">
+                    <p class="c10"><span class="c5 c45">CLIENTE</span></p>
+                    <p class="c8 c26"><span class="c5 c45"></span></p>
+                    <p class="c8 c26"><span class="c5 c12"></span></p>
+                    <p class="c10"><span class="c5 c12">{{nombre}}</span></p>
+                    <p class="c8 c26"><span class="c5 c4"></span></p>
+                    <p class="c10"><span class="c4">{{client_info}}</span></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="c13 c18"><span class="c5 c47"></span></p>
+    <a id="t.5175db24a5a608e9b3ad8e13c9c6d54ad3425cfc"></a>
+    <a id="t.1"></a>
+    <table class="c29">
+        <tbody>
+            <tr class="c41">
+                <td class="c19" colspan="1" rowspan="1">
+                    <p class="c55"><span class="c15">CONCEPTO</span></p>
+                </td>
+                <td class="c0" colspan="1" rowspan="1">
+                    <p class="c22"><span class="c15">CANTIDAD</span></p>
+                </td>
+                <td class="c38" colspan="1" rowspan="1">
+                    <p class="c22"><span class="c15">VALOR</span></p>
+                </td>
+                <td class="c53" colspan="1" rowspan="1">
+                    <p class="c22"><span class="c15">IMPORTE</span></p>
+                </td>
+            </tr>
+            <tr class="c31">
+                <td class="c1" colspan="1" rowspan="1">
+                    <p class="c8"><span class="c5 c6"></span></p>
+                </td>
+                <td class="c27" colspan="1" rowspan="1">
+                    <p class="c18 c22"><span class="c5 c6"></span></p>
+                </td>
+                <td class="c37" colspan="1" rowspan="1">
+                    <p class="c16"><span class="c5 c6"></span></p>
+                </td>
+                <td class="c44" colspan="1" rowspan="1">
+                    <p class="c16"><span class="c5 c6"></span></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="c13 c18"><span class="c2"></span></p>
+    <p class="c13 c18"><span class="c2"></span></p>
+    <a id="t.9d390e037c188e66299f7bc4685ce984830b5242"></a>
+    <a id="t.2"></a>
+    <table class="c43">
+        <tbody>
+            <tr class="c20">
+                <td class="c54" colspan="1" rowspan="1">
+                    <p class="c14"><span class="c5 c23">SUBTOTAL</span></p>
+                </td>
+                <td class="c24" colspan="1" rowspan="1">
+                    <p class="c3"><span class="c5 c35">{{ total|currencier }}</span></p>
+                </td>
+            </tr>
+            <tr class="c20">
+                <td class="c49" colspan="1" rowspan="1">
+                    <p class="c52"><span class="c5 c23">ABONADO</span></p>
+                </td>
+                <td class="c56" colspan="1" rowspan="1">
+                    <p class="c25"><span class="c5 c35">- {{ payments_total|currencier }}</span></p>
+                </td>
+            </tr>
+            <tr class="c20">
+                <td class="c50" colspan="1" rowspan="1">
+                    <p class="c14"><span class="c5 c42">TOTAL PRESUPUESTO</span></p>
+                </td>
+                <td class="c11" colspan="1" rowspan="1">
+                    <p class="c3"><span class="c5 c28">{{ left_balance|currencier }}</span></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="c13 c18"><span class="c2"></span></p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p class="c13 c18"><span class="c2"></span></p>
+    <p class="c13 c18"><span class="c2"></span></p>
+    <p class="c13"><span class="c2">* Este presupuesto tiene validez hasta el día {{fecha_vencimiento}}.</span>
+    </p>
+    <p class="c13"><span class="c32">** Una vez confirmado, se abona una seña del 50% por confección y el
+            total de los materiales.</span></p>
+    <div>
+        <p class="c13"><span
+                style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 755.91px; height: 24.00px;"><img
+                    alt="" src="images/image2.png"
+                    style="width: 755.91px; height: 24.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+                    title=""></span></p>
+    </div>
 </body>
 
 </html>

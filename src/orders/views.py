@@ -1,5 +1,14 @@
+import io
+from reportlab.lib.pagesizes import A4
+# from reportlab.lib.units import cm
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -63,6 +72,61 @@ def get_order_detail_view(request, id, *args, **kwargs):
         'net_worth': balances['net_worth'],
     }
     return render(request, 'orders/order_detail.html', context)
+
+
+def some_view(request, *args, **kwargs):
+    template_path = "orders/order_pdf.html"
+    id_ = kwargs.get("id")
+    order = get_object_or_404(Order, id=id_)
+    items = order.items.all()
+    fabrics = order.fabrics.all()
+    payments = order.payments.all()
+    balances = order.get_balances(items, fabrics, payments)
+    context = {
+        'order': order,
+        'total': balances['total'],
+        'payments_total': balances['payments_total'],
+        'left_balance': balances['left_balance'],
+    }
+    
+    # # Create a file-like buffer to receive PDF data.
+    # buffer = io.BytesIO()
+
+    # # Create the PDF object, using the buffer as its "file."
+    # c = canvas.Canvas(buffer, pagesize=A4)
+
+    # MAX_WIDTH = 595.2755905511812
+    # HALF_WIDTH = MAX_WIDTH / 2
+    # MAX_LENGTH = 841.8897637795277
+    # HALF_LENGTH = MAX_LENGTH / 2
+
+    # # HEADER
+    # c.setFillColorRGB(0, 0, 0)
+    # c.rect(10, MAX_LENGTH-20, HALF_WIDTH-65, 10, stroke=0, fill=1)
+    # c.rect(MAX_WIDTH-10, MAX_LENGTH-20, -(HALF_WIDTH-65), 10, stroke=0, fill=1)
+    # c.setFillColorRGB(255, 255, 255)
+    # # c.rect(MAX_WIDTH/2-55, MAX_LENGTH-20, 55*2, 10, stroke=0, fill=1)
+
+    # c.setFont("Helvetica", 12)
+
+    # c.setFillColorRGB(0, 0, 0)
+    # c.drawCentredString(MAX_WIDTH/2, MAX_LENGTH-19.5, "PRESUPUESTO")
+    # # textobject = c.beginText()
+    # # textobject.setTextOrigin(MAX_WIDTH/2, MAX_LENGTH-10)
+    # # textobject.setFont("Helvetica", 14)
+    # # textobject.textLines('PRESUPUESTO')
+    # # c.drawText(textobject)
+
+    # # define a large font
+
+    # # Close the PDF object cleanly, and we're done.
+    # c.showPage()
+    # c.save()
+
+    # # FileResponse sets the Content-Disposition header so that browsers
+    # # present the option to save the file.
+    # buffer.seek(0)
+    # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
 
 
 class OrderUpdateView(UpdateView):

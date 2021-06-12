@@ -14,6 +14,7 @@ from .views import (
     PaymentCreateView,
     PaymentDeleteView,
     PaymentUpdateView,
+    some_view,
 )
 
 app_name = 'orders'
@@ -48,4 +49,8 @@ urlpatterns = [
          name='order-delete-payment'),
     path('<int:id>/update-payment/<int:payment>', PaymentUpdateView.as_view(),
          name='order-update-payment'),
+
+    # PDF
+    path('prueba', some_view, name="prueba"),
+
 ]
