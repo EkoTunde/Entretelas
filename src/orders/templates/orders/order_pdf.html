@@ -1,4 +1,5 @@
 {% load currency_extras %}
+{% load static %}
 
 <html>
 
@@ -745,7 +746,7 @@
     <div>
         <p class="c13"><span
                 style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 755.91px; height: 14.67px;"><img
-                    alt="" src="images/image1.png"
+                    alt="" src="{% static 'pdf_header.png' %}" {% comment %} src="images/image1.png" {% endcomment %}
                     style="width: 755.91px; height: 14.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
                     title=""></span></p>
     </div>

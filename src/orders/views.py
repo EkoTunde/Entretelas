@@ -1,14 +1,7 @@
 import io
-from reportlab.lib.pagesizes import A4
-# from reportlab.lib.units import cm
 from django.http import FileResponse
-from reportlab.pdfgen import canvas
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.http import HttpResponse
-from django.template.loader import get_template
-from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -26,6 +19,7 @@ from .forms import (
     PaymentModelForm,
     PaymentUpdateForm,
 )
+from .utils import PDFReport
 
 
 class OrderCreateView(CreateView):
@@ -74,74 +68,70 @@ def get_order_detail_view(request, id, *args, **kwargs):
     return render(request, 'orders/order_detail.html', context)
 
 
+# def some_view(request, *args, **kwargs):
+#     template_path = "orders/order_pdf.html"
+#     id_ = kwargs.get("id")
+#     order = get_object_or_404(Order, id=id_)
+#     items = order.items.all()
+#     fabrics = order.fabrics.all()
+#     payments = order.payments.all()
+#     balances = order.get_balances(items, fabrics, payments)
+#     context = {
+#         'order': order,
+#         'total': balances['total'],
+#         'payments_total': balances['payments_total'],
+#         'left_balance': balances['left_balance'],
+#     }
+
+#     # Create a Django response object, and specify content_type as pdf
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+#     # find the template and render it.
+#     template = get_template(template_path)
+#     html = template.render(context)
+
+#     # create a pdf
+#     pisa_status = pisa.CreatePDF(
+#        html, dest=response)
+#     # if error then show some funy view
+#     if pisa_status.err:
+#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
+#     return response
+
 def some_view(request, *args, **kwargs):
-    template_path = "orders/order_pdf.html"
-    id_ = kwargs.get("id")
-    order = get_object_or_404(Order, id=id_)
-    items = order.items.all()
-    fabrics = order.fabrics.all()
-    payments = order.payments.all()
-    balances = order.get_balances(items, fabrics, payments)
-    context = {
-        'order': order,
-        'total': balances['total'],
-        'payments_total': balances['payments_total'],
-        'left_balance': balances['left_balance'],
-    }
+    # Create a file-like buffer to receive PDF data.
+    buffer = io.BytesIO()
 
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
+    pdf = PDFReport(
+        io.BytesIO(),
+        "29/06/2021",
+        12345678,
+        "14/06/2021",
+        {
+            'first': "Georgina Lara",
+            'last': "Passarotto",
+            'tel': 1123456789,
+            'email': 'georgina.passarotto@gmail.com',
+            'city': 'Bella Vista',
+            'state': 'Buenos Aires',
+        },
+        [
+            ["Confección 1", "1", "5000", "5000"],
+            ["Confección 2", "2", "2500", "5000"],
+            ["Confección 3", "5", "1000", "5000"],
+        ],
+        {
+            'subtotal': 15000,
+            'discount_percentage': 10,
+            'discount_amount': 1500,
+            'total': 13500,
+        })
+    pdf.save()
 
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response)
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-
-    # # Create a file-like buffer to receive PDF data.
-    # buffer = io.BytesIO()
-
-    # # Create the PDF object, using the buffer as its "file."
-    # c = canvas.Canvas(buffer, pagesize=A4)
-
-    # MAX_WIDTH = 595.2755905511812
-    # HALF_WIDTH = MAX_WIDTH / 2
-    # MAX_LENGTH = 841.8897637795277
-    # HALF_LENGTH = MAX_LENGTH / 2
-
-    # # HEADER
-    # c.setFillColorRGB(0, 0, 0)
-    # c.rect(10, MAX_LENGTH-20, HALF_WIDTH-65, 10, stroke=0, fill=1)
-    # c.rect(MAX_WIDTH-10, MAX_LENGTH-20, -(HALF_WIDTH-65), 10, stroke=0, fill=1)
-    # c.setFillColorRGB(255, 255, 255)
-    # # c.rect(MAX_WIDTH/2-55, MAX_LENGTH-20, 55*2, 10, stroke=0, fill=1)
-
-    # c.setFont("Helvetica", 12)
-
-    # c.setFillColorRGB(0, 0, 0)
-    # c.drawCentredString(MAX_WIDTH/2, MAX_LENGTH-19.5, "PRESUPUESTO")
-    # # textobject = c.beginText()
-    # # textobject.setTextOrigin(MAX_WIDTH/2, MAX_LENGTH-10)
-    # # textobject.setFont("Helvetica", 14)
-    # # textobject.textLines('PRESUPUESTO')
-    # # c.drawText(textobject)
-
-    # # define a large font
-
-    # # Close the PDF object cleanly, and we're done.
-    # c.showPage()
-    # c.save()
-
-    # # FileResponse sets the Content-Disposition header so that browsers
-    # # present the option to save the file.
-    # buffer.seek(0)
-    # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
 
 
 class OrderUpdateView(UpdateView):
