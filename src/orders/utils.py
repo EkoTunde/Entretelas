@@ -1,3 +1,4 @@
+import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.enums import TA_JUSTIFY
@@ -5,6 +6,8 @@ from reportlab.lib import colors
 from reportlab.platypus import Paragraph, Table, TableStyle, Frame
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus.flowables import Image, Spacer
+import PIL
+from mysite import settings
 
 
 class PDFReport(object):
@@ -33,6 +36,7 @@ class PDFReport(object):
         self.customer_info = customer_info
         self.order_items = order_items
         self.results = results
+        self.pdf = None
 
     def create_pdf(self):
         self.pdf = canvas.Canvas(self.buffer, pagesize=A4)
@@ -61,11 +65,9 @@ class PDFReport(object):
         story = [part for part in parts]
 
         f.addFromList(story, self.pdf)
-        return
-
-    def save(self):
         self.pdf.showPage()
-        return self.pdf.save()
+        self.pdf.save()
+        return
 
     def get_paddings(self):
         return {
@@ -102,7 +104,8 @@ class PDFReport(object):
             20.5,
             "/entretelas.mlh"
         )
-        ig = "instagram.jpg"
+        ig = PIL.Image.open(os.path.join(
+            settings.STATIC_ROOT, 'instagram.jpg'))
         x_ig, y_ig = self.HALF_WIDTH - 53, 18
         w_ig, h_ig = 13, 13
         self.pdf.drawInlineImage(ig, x_ig, y_ig, w_ig, h_ig)
@@ -145,7 +148,7 @@ class PDFReport(object):
 
     def get_info_logo(self):
         w, h = 139.074, 141.113
-        return Image("src/pdf_logo.png", w, h)
+        return Image(os.path.join(settings.STATIC_ROOT, 'pdf_logo.png'), w, h)
 
     def get_p_info_style(self):
         styleP = self.stylesheet["Normal"]
@@ -170,6 +173,7 @@ class PDFReport(object):
         tel = self.customer_info.get('tel')
         email = self.customer_info.get('email')
         city = self.customer_info.get('city')
+        zip_code = self.customer_info.get('zip_code')
         state = self.customer_info.get('state')
         text = f"""
             CLIENTE<br/>
@@ -178,7 +182,7 @@ class PDFReport(object):
             <br/>
             {tel}<br/>
             {email}<br/>
-            {city}<br/>
+            {city} ({zip_code})<br/>
             {state}<br/>
             <br/>
             <br/>

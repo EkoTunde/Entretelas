@@ -11,6 +11,10 @@ class OrderModelForm(forms.ModelForm):
             'customer_last_name',
             'customer_email',
             'customer_tel',
+            'customer_city',
+            'customer_zip_code',
+            'customer_state',
+            'discount',
         ]
 
 

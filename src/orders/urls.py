@@ -8,13 +8,12 @@ from .views import (
     FabricUpdateView,
     OrderCreateView,
     OrderDeleteView,
-    # OrderDetailView,
     OrderUpdateView,
     get_order_detail_view,
     PaymentCreateView,
     PaymentDeleteView,
     PaymentUpdateView,
-    some_view,
+    generate_pdf_report,
 )
 
 app_name = 'orders'
@@ -25,6 +24,8 @@ urlpatterns = [
     path('<int:id>/', get_order_detail_view, name='order-detail'),
     path('<int:id>/update/', OrderUpdateView.as_view(), name='order-update'),
     path('<int:id>/delete/', OrderDeleteView.as_view(), name='order-delete'),
+    # Generate pdf report
+    path('<int:id>/print', generate_pdf_report, name="pdf-report"),
 
     # Items
     path('<int:id>/add-item/', ItemCreateView.as_view(),
@@ -50,7 +51,5 @@ urlpatterns = [
     path('<int:id>/update-payment/<int:payment>', PaymentUpdateView.as_view(),
          name='order-update-payment'),
 
-    # PDF
-    path('prueba/<int:id>', some_view, name="prueba"),
 
 ]

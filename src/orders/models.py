@@ -34,6 +34,15 @@ class Order(models.Model):
     customer_tel = models.CharField(
         max_length=50, verbose_name="Teléfono",
         default=None, blank=True, null=True)
+    customer_city = models.CharField(
+        max_length=50, verbose_name="Localidad",
+        default=None, blank=True, null=True)
+    customer_zip_code = models.CharField(
+        max_length=50, verbose_name="Código Postal",
+        default=None, blank=True, null=True)
+    customer_state = models.CharField(
+        max_length=50, verbose_name="Provincia",
+        default=None, blank=True, null=True)
     creation_date = models.DateTimeField(
         verbose_name="creation date", auto_now_add=True)
     last_edited = models.DateTimeField(
@@ -44,6 +53,10 @@ class Order(models.Model):
     state = models.CharField(
         max_length=1, choices=STATES, default=NEW,
         verbose_name="Estado")
+    discount = models.DecimalField(
+        verbose_name="Porcentaje de descuento por confección",
+        decimal_places=2, max_digits=5,
+        default=None, blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("orders:order-detail", kwargs={"id": self.id})

@@ -20,6 +20,7 @@ from .forms import (
     PaymentUpdateForm,
 )
 from .utils import PDFReport
+import datetime
 
 
 class OrderCreateView(CreateView):
@@ -47,6 +48,10 @@ class OrderDetailView(DetailView):
 
 
 def get_order_detail_view(request, id, *args, **kwargs):
+
+    # ! TENGO QUE MOSTRAR SUBTOTAL Y EL DESCUENTO
+    # ! EL PDF TIENE QUE TENER LOS ITEMS, HAY QUE PASÁRSELOS A LA VIEW
+
     order = get_object_or_404(Order, id=id)
     items = order.items.all()
     fabrics = order.fabrics.all()
@@ -68,65 +73,47 @@ def get_order_detail_view(request, id, *args, **kwargs):
     return render(request, 'orders/order_detail.html', context)
 
 
-# def some_view(request, *args, **kwargs):
-#     template_path = "orders/order_pdf.html"
-#     id_ = kwargs.get("id")
-#     order = get_object_or_404(Order, id=id_)
-#     items = order.items.all()
-#     fabrics = order.fabrics.all()
-#     payments = order.payments.all()
-#     balances = order.get_balances(items, fabrics, payments)
-#     context = {
-#         'order': order,
-#         'total': balances['total'],
-#         'payments_total': balances['payments_total'],
-#         'left_balance': balances['left_balance'],
-#     }
+def generate_pdf_report(request, id, *args, **kwargs):
 
-#     # Create a Django response object, and specify content_type as pdf
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-#     # find the template and render it.
-#     template = get_template(template_path)
-#     html = template.render(context)
+    order = get_object_or_404(Order, id=id)
 
-#     # create a pdf
-#     pisa_status = pisa.CreatePDF(
-#        html, dest=response)
-#     # if error then show some funy view
-#     if pisa_status.err:
-#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
-#     return response
-
-def some_view(request, *args, **kwargs):
     # Create a file-like buffer to receive PDF data.
     buffer = io.BytesIO()
 
+    today = datetime.datetime.today()
+    fifteen_days = datetime.timedelta(15)
+    expiration_date = today + fifteen_days
+    output = "{:%d/%m/%Y}"
+    today = output.format(today)
+    expiration_date = output.format(expiration_date)
+
     pdf = PDFReport(
-        io.BytesIO(),
-        "29/06/2021",
-        12345678,
-        "14/06/2021",
-        {
-            'first': "Georgina Lara",
-            'last': "Passarotto",
-            'tel': 1123456789,
-            'email': 'georgina.passarotto@gmail.com',
-            'city': 'Bella Vista',
-            'state': 'Buenos Aires',
+        buffer,
+        title='Presupuesto',
+        expiration_date=expiration_date,
+        id=order.id,
+        date=today,
+        customer_info={
+            'first': order.customer_first_name,
+            'last': order.customer_last_name,
+            'tel': order.customer_tel,
+            'email': order.customer_email,
+            'city': order.customer_city,
+            'zip_code': order.customer_zip_code,
+            'state': order.customer_state,
         },
-        [
+        order_items=[
             ["Confección 1", "1", "5000", "5000"],
             ["Confección 2", "2", "2500", "5000"],
             ["Confección 3", "5", "1000", "5000"],
         ],
-        {
+        results={
             'subtotal': 15000,
             'discount_percentage': 10,
             'discount_amount': 1500,
             'total': 13500,
         })
-    pdf.save()
+    pdf.create_pdf()
 
     # FileResponse sets the Content-Disposition header so that browsers
     # present the option to save the file.
